@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>શાર્દૂલ શિશુ વિહાર - સમયપત્રક</title>
+<style>
+  :root{--saffron:#F07800; --brown:#3B1000; --gold:#FFD060; --bg:#FBF7F2; --bd:#E8DDD0; --mu:#7A6A5A;}
+  *{box-sizing:border-box}
+  body{font-family:'Noto Sans Gujarati',sans-serif;margin:0;background:var(--bg);color:#222}
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;500;600;700&display=swap');
+
+  .container{max-width:600px;margin:0 auto;padding:40px 20px;text-align:center}
+  h1{color:var(--brown);font-size:28px;margin:0 0 10px}
+  .subtitle{color:var(--mu);font-size:14px;margin-bottom:40px}
+
+  .schedule-list{display:flex;flex-direction:column;gap:12px}
+  .schedule-link{display:block;padding:15px;background:#fff;border:2px solid var(--saffron);border-radius:8px;text-decoration:none;color:var(--brown);font-weight:600;transition:all 0.3s}
+  .schedule-link:hover{background:var(--saffron);color:#fff;transform:translateY(-2px)}
+  .schedule-link.current{background:var(--saffron);color:#fff;font-size:16px}
+
+  @media print{display:none}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>શાર્દૂલ શિશુ વિહાર</h1>
+  <p class="subtitle">સાપ્તાહિક સમયપત્રક</p>
+  <div class="schedule-list">
+    <a href="index.html" class="schedule-link current">📅 આજનો સમયપત્રક (વર્તમાન)</a>
+    <a href="week1.html" class="schedule-link">હપ્તો 1</a>
+    <a href="week2.html" class="schedule-link">હપ્તો 2</a>
+  </div>
+</div>
+</body>
+</html>
