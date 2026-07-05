@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>શાર્દૂલ શિશુ વિહાર — હપ્તો 1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Gujarati:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --saffron:#F07800; --brown:#3B1000; --gold:#FFD060;
+    --bg:#FBF7F2; --bg-lt:#FAF5EC; --bd:#E8DDD0; --mu:#7A6A5A;
+  }
+  *{box-sizing:border-box}
+  body{font-family:'Noto Sans Gujarati',sans-serif;margin:0;background:var(--bg);color:#222}
+
+  .container{max-width:960px;margin:0 auto;padding:16px}
+  .header{text-align:center;margin-bottom:14px;border-bottom:3px solid var(--saffron);padding-bottom:12px;background:var(--bg)}
+  .header h1{color:var(--brown);margin:0;font-size:24px}
+  .header p{color:var(--mu);margin:4px 0 0;font-size:13px}
+  .header .selinfo{color:var(--saffron);font-weight:600;font-size:14px}
+
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;background:#fff;border:1px solid var(--bd);border-radius:10px;padding:10px 12px;margin-bottom:14px}
+  .ctrl{display:flex;flex-direction:column;gap:3px}
+  .ctrl label{font-size:11.5px;font-weight:600;color:var(--brown)}
+  .ctrl select{font-family:inherit;font-size:13px;padding:6px 8px;border:1px solid var(--bd);border-radius:7px;background:var(--bg-lt);color:#222;min-width:120px}
+  .btns{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap}
+  .btns button{font-family:inherit;font-size:13px;font-weight:600;padding:7px 12px;border:none;border-radius:7px;cursor:pointer;background:var(--saffron);color:#fff}
+  .btns button.alt{background:var(--brown)}
+  .btns button:disabled{opacity:.55;cursor:wait}
+
+  .tablewrap{overflow-x:auto}
+  table.sched{width:100%;border-collapse:collapse;margin-bottom:14px;background:#fff}
+  table.sched th.daytitle{background:var(--gold);color:var(--brown);font-size:14px;text-align:center;padding:8px;border:2px solid var(--bd)}
+  table.sched th{border:1px solid var(--bd);padding:6px;font-size:12px;background:#fff6e0;color:var(--brown)}
+  table.sched td{border:1px solid var(--bd);padding:6px;font-size:12px;vertical-align:top}
+  table.sched td.time{font-weight:700;color:var(--brown);background:var(--bg-lt);white-space:nowrap;text-align:center;width:80px}
+  table.sched td.empty{color:var(--mu);text-align:center;font-style:italic}
+  table.sched .subj{font-weight:600;color:#222;margin-bottom:3px}
+  table.sched .meta{font-size:11px;color:#666}
+
+  .legend{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0;justify-content:center;padding:10px;background:#fff;border-radius:8px}
+  .lg-item{display:flex;align-items:center;gap:6px;font-size:12px}
+  .lg-swatch{width:12px;height:12px;border-radius:2px;display:inline-block;border:1px solid rgba(0,0,0,.15)}
+
+  @media print{
+    body{margin:0;padding:0;background:#fff}
+    .container{max-width:100%;padding:10mm}
+    .no-print{display:none !important}
+    table.sched{page-break-inside:avoid;break-inside:avoid}
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="toolbar no-print">
+    <div class="ctrl">
+      <label for="viewSel">જુઓ</label>
+      <select id="viewSel">
+        <option value="full">સંપૂર્ણ સમયપત્રક</option>
+        <option value="group">જૂથ પ્રમાણે</option>
+        <option value="teacher">શિક્ષક પ્રમાણે</option>
+      </select>
+    </div>
+    <div class="ctrl" id="groupCtrl" style="display:none">
+      <label for="groupSel">જૂથ</label>
+      <select id="groupSel"></select>
+    </div>
+    <div class="ctrl" id="teacherCtrl" style="display:none">
+      <label for="teacherSel">શિક્ષક</label>
+      <select id="teacherSel"></select>
+    </div>
+    <div class="ctrl">
+      <label for="daySel">દિવસ</label>
+      <select id="daySel"></select>
+    </div>
+    <div class="btns">
+      <button id="imgBtn" onclick="downloadImage()">🖼️ ઇમેજ ડાઉનલોડ</button>
+      <button id="pdfBtn" onclick="downloadPDF()">📄 PDF ડાઉનલોડ</button>
+      <button class="alt" onclick="window.print()">🖨️ પ્રિન્ટ</button>
+    </div>
+  </div>
+  <noscript><p style="text-align:center;color:#a00">આ પેજ માટે JavaScript જરૂરી છે.</p></noscript>
+
+  <div id="capture">
+    <div class="header pdf-block">
+      <h1>શાર્દૂલ શિશુ વિહાર</h1>
+      <p>સાપ્તાહિક સમયપત્રક — હપ્તો 1</p>
+      <p class="selinfo" id="selInfo"></p>
+    </div>
+    <div id="printArea"></div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+var DATA = {"title":"હપ્તો 1","groups":[{"key":"aditya","name":"આદિત્ય","age":"8-10"},{"key":"ravi","name":"રવિ","age":"10-12"},{"key":"bhaskar","name":"ભાસ્કર","age":"13-15"}],"days":["સોમવાર","મંગળવાર","બુધવાર","ગુરુવાર","શુક્રવાર"],"slots":["7:00-7:30","7:30-8:00","8:00-8:30","8:30-9:00","9:00-9:30","9:30-10:00","10:00-10:30","10:30-11:00","11:00-11:30","11:30-12:00","12:00-12:30"],"week":{"સોમવાર":{"7:00-7:30":{"aditya":{"subject":"ક્રીડા","teacher":"સંજયભાઈ","location":"મંદિર"},"ravi":{"subject":"ક્રીડા","teacher":"સંજયભાઈ","location":"મંદિર"},"bhaskar":{"subject":"ક્રીડા","teacher":"સંજયભાઈ","location":"મંદિર"}},"7:30-8:00":{"aditya":{"subject":"વાંચન -લેખન - ગણિત","teacher":"સંજયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"વાંચન -લેખન - ગણિત","teacher":"સંજયભાઈ","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ગણિત","teacher":"સુમિતભાઈ","location":"અભ્યાસ ગૃહ"}},"8:00-8:30":{"aditya":{"subject":"વાંચન -લેખન - ગણિત","teacher":"સંજયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"વાંચન -લેખન - ગણિત","teacher":"સંજયભાઈ","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ગણિત","teacher":"સુમિતભાઈ","location":"અભ્યાસ ગૃહ"}},"8:30-9:00":{"aditya":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"}},"9:00-9:30":{"aditya":{"subject":"સંગીત","teacher":"દિપક ગુરુજી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"સંગીત","teacher":"દિપક ગુરુજી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"સંગીત","teacher":"દિપક ગુરુજી","location":"અભ્યાસ ગૃહ"}},"9:30-10:00":{"aditya":{"subject":"સંગીત","teacher":"દિપક ગુરુજી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"સંગીત","teacher":"દિપક ગુરુજી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"સંગીત","teacher":"દિપક ગુરુજી","location":"અભ્યાસ ગૃહ"}},"10:00-10:30":{"aditya":{"subject":"વાંચન -લેખન","teacher":"હિતેશભાઈ પોપલીયા","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"ગણિત","teacher":"મેઘનાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ગણિત","teacher":"મનીષભાઈ","location":"અભ્યાસ ગૃહ"}},"10:30-11:00":{"aditya":{"subject":"વાંચન -લેખન","teacher":"હિતેશભાઈ પોપલીયા","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"ગણિત","teacher":"મેઘનાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ગણિત","teacher":"મનીષભાઈ","location":"અભ્યાસ ગૃહ"}},"11:00-11:30":{"aditya":{"subject":"અભિવ્યક્તિ","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"અભિવ્યક્તિ","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"અભિવ્યક્તિ","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"}},"11:30-12:00":{"aditya":{"subject":"અભિવ્યક્તિ","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"અભિવ્યક્તિ","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"અભિવ્યક્તિ","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"}},"12:00-12:30":{"aditya":{"subject":"ક્રીડા","teacher":"ચિન્મયભાઈ","location":"મંદિર"},"ravi":{"subject":"ક્રીડા","teacher":"ચિન્મયભાઈ","location":"મંદિર"},"bhaskar":{"subject":"ક્રીડા","teacher":"ચિન્મયભાઈ","location":"મંદિર"}}},"મંગળવાર":{"7:00-7:30":{"aditya":{"subject":"ક્રીડા","teacher":"સંજયભાઈ","location":"મંદિર"},"ravi":{"subject":"ક્રીડા","teacher":"સંજયભાઈ","location":"મંદિર"},"bhaskar":{"subject":"ક્રીડા","teacher":"સંજયભાઈ","location":"મંદિર"}},"7:30-8:00":{"aditya":{"subject":"વાંચન -લેખન - ગણિત","teacher":"સંજયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"વાંચન -લેખન - ગણિત","teacher":"સંજયભાઈ","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ગણિત","teacher":"સુમિતભાઈ","location":"અભ્યાસ ગૃહ"}},"8:00-8:30":{"aditya":{"subject":"વાંચન -લેખન - ગણિત","teacher":"સંજયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"વાંચન -લેખન - ગણિત","teacher":"સંજયભાઈ","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ગણિત","teacher":"સુમિતભાઈ","location":"અભ્યાસ ગૃહ"}},"8:30-9:00":{"aditya":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"}},"9:00-9:30":{"aditya":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"}},"9:30-10:00":{"aditya":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"}},"10:00-10:30":{"aditya":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"}},"10:30-11:00":{"aditya":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"}},"11:00-11:30":{"aditya":{"subject":"રામાયણ","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"રામાયણ","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"રામાયણ","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"}},"11:30-12:00":{"aditya":{"subject":"રામાયણ","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"રામાયણ","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"રામાયણ","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"}},"12:00-12:30":{"aditya":{"subject":"ક્રીડા","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"ક્રીડા","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ક્રીડા","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"}}},"બુધવાર":{"7:00-7:30":{"aditya":{"subject":"ક્રીડા","teacher":"સંજયભાઈ","location":"મંદિર"},"ravi":{"subject":"ક્રીડા","teacher":"સંજયભાઈ","location":"મંદિર"},"bhaskar":{"subject":"યોગ - જીવન વિજ્ઞાન","teacher":"નિસર્ગભાઈ","location":"મંદિર"}},"7:30-8:00":{"aditya":{"subject":"વાંચન -લેખન - ગણિત","teacher":"સંજયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"વાંચન -લેખન - ગણિત","teacher":"સંજયભાઈ","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ગણિત","teacher":"સુમિતભાઈ","location":"અભ્યાસ ગૃહ"}},"8:00-8:30":{"aditya":{"subject":"વાંચન -લેખન - ગણિત","teacher":"સંજયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"વાંચન -લેખન - ગણિત","teacher":"સંજયભાઈ","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ગણિત","teacher":"સુમિતભાઈ","location":"અભ્યાસ ગૃહ"}},"8:30-9:00":{"aditya":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"}},"9:00-9:30":{"aditya":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"}},"9:30-10:00":{"aditya":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"}},"10:00-10:30":{"aditya":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"}},"10:30-11:00":{"aditya":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"}},"11:00-11:30":{"aditya":{"subject":"રામાયણ","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"રામાયણ","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"રામાયણ","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"}},"11:30-12:00":{"aditya":{"subject":"રામાયણ","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"રામાયણ","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"રામાયણ","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"}},"12:00-12:30":{"aditya":{"subject":"ક્રીડા","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"ક્રીડા","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ક્રીડા","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"}}},"ગુરુવાર":{"7:00-7:30":{"aditya":{"subject":"યોગ - જીવન વિજ્ઞાન","teacher":"નિસર્ગભાઈ","location":"મંદિર"},"ravi":{"subject":"યોગ - જીવન વિજ્ઞાન","teacher":"નિસર્ગભાઈ","location":"મંદિર"},"bhaskar":{"subject":"યોગ - જીવન વિજ્ઞાન","teacher":"નિસર્ગભાઈ","location":"મંદિર"}},"7:30-8:00":{"aditya":{"subject":"ક્રિયાકલાપ","teacher":"જિગીષાબેન","location":"મંદિર"},"ravi":{"subject":"ક્રિયાકલાપ","teacher":"જિગીષાબેન","location":"મંદિર"},"bhaskar":{"subject":"યોગ - જીવન વિજ્ઞાન","teacher":"નિસર્ગભાઈ","location":"મંદિર"}},"8:00-8:30":{"aditya":{"subject":"ક્રિયાકલાપ","teacher":"જિગીષાબેન","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"ક્રિયાકલાપ","teacher":"જિગીષાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"આયુર્વેદ","teacher":"હિતેશભાઈ","location":"અભ્યાસ ગૃહ"}},"8:30-9:00":{"aditya":{"subject":"ક્રિયાકલાપ","teacher":"જિગીષાબેન","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"ક્રિયાકલાપ","teacher":"જિગીષાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"આયુર્વેદ","teacher":"હિતેશભાઈ","location":"અભ્યાસ ગૃહ"}},"9:00-9:30":{"aditya":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"}},"9:30-10:00":{"aditya":{"subject":"વિજ્ઞાન","teacher":"નિસર્ગ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"ગણિત","teacher":"મેઘનાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ગણિત","teacher":"મનીષભાઈ","location":"અભ્યાસ ગૃહ"}},"10:00-10:30":{"aditya":{"subject":"વિજ્ઞાન","teacher":"નિસર્ગ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"ગણિત","teacher":"મેઘનાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ગણિત","teacher":"મનીષભાઈ","location":"અભ્યાસ ગૃહ"}},"10:30-11:00":{"aditya":{"subject":"સ્વાધ્યાય","teacher":"સ્વાધ્યાય","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"સ્વાધ્યાય","teacher":"સ્વાધ્યાય","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"સ્વાધ્યાય","teacher":"સ્વાધ્યાય","location":"અભ્યાસ ગૃહ"}},"11:00-11:30":{"aditya":{"subject":"અભિવ્યક્તિ","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"અભિવ્યક્તિ","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"અભિવ્યક્તિ","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"}},"11:30-12:00":{"aditya":{"subject":"અભિવ્યક્તિ","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"અભિવ્યક્તિ","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"અભિવ્યક્તિ","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"}},"12:00-12:30":{"aditya":{"subject":"ક્રીડા","teacher":"ચિન્મયભાઈ","location":"મંદિર"},"ravi":{"subject":"ક્રીડા","teacher":"ચિન્મયભાઈ","location":"મંદિર"},"bhaskar":{"subject":"ક્રીડા","teacher":"ચિન્મયભાઈ","location":"મંદિર"}}},"શુક્રવાર":{"7:00-7:30":{"aditya":{"subject":"ક્રીડા","teacher":"અર્પિતભાઈ","location":"ખેતર"},"ravi":{"subject":"ક્રીડા","teacher":"અર્પિતભાઈ","location":"ખેતર"},"bhaskar":{"subject":"ક્રીડા","teacher":"અર્પિતભાઈ","location":"ખેતર"}},"7:30-8:00":{"aditya":{"subject":"કૃષિ","teacher":"અર્પિતભાઈ","location":"ખેતર"},"ravi":{"subject":"કૃષિ","teacher":"અર્પિતભાઈ","location":"ખેતર"},"bhaskar":{"subject":"કૃષિ","teacher":"અર્પિતભાઈ","location":"ખેતર"}},"8:00-8:30":{"aditya":{"subject":"કૃષિ","teacher":"અર્પિતભાઈ","location":"ખેતર"},"ravi":{"subject":"કૃષિ","teacher":"અર્પિતભાઈ","location":"ખેતર"},"bhaskar":{"subject":"કૃષિ","teacher":"અર્પિતભાઈ","location":"ખેતર"}},"8:30-9:00":{"aditya":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"}},"9:00-9:30":{"aditya":{"subject":"કૃષિ","teacher":"અર્પિતભાઈ","location":"ખેતર"},"ravi":{"subject":"કૃષિ","teacher":"અર્પિતભાઈ","location":"ખેતર"},"bhaskar":{"subject":"કૃષિ","teacher":"અર્પિતભાઈ","location":"ખેતર"}},"9:30-10:00":{"aditya":{"subject":"કૃષિ","teacher":"અર્પિતભાઈ","location":"ખેતર"},"ravi":{"subject":"કૃષિ","teacher":"અર્પિતભાઈ","location":"ખેતર"},"bhaskar":{"subject":"કૃષિ","teacher":"અર્પિતભાઈ","location":"ખેતર"}},"10:00-10:30":{"aditya":{"subject":"કૃષિ","teacher":"અર્પિતભાઈ","location":"ખેતર"},"ravi":{"subject":"કૃષિ","teacher":"અર્પિતભાઈ","location":"ખેતર"},"bhaskar":{"subject":"કૃષિ","teacher":"અર્પિતભાઈ","location":"ખેતર"}},"10:30-11:00":{"aditya":{"subject":"કૃષિ","teacher":"અર્પિતભાઈ","location":"ખેતર"},"ravi":{"subject":"વિજ્ઞાન","teacher":"નિસર્ગભાઈ","location":"ખેતર"},"bhaskar":{"subject":"અંગ્રેજી","teacher":"હિતેશભાઈ પોપલીયા","location":"ખેતર"}},"11:00-11:30":{"aditya":{"subject":"કૃષિ","teacher":"અર્પિતભાઈ","location":"ખેતર"},"ravi":{"subject":"વિજ્ઞાન","teacher":"નિસર્ગભાઈ","location":"ખેતર"},"bhaskar":{"subject":"અંગ્રેજી","teacher":"હિતેશભાઈ પોપલીયા","location":"ખેતર"}},"11:30-12:00":{"aditya":{"subject":"","teacher":"","location":""},"ravi":{"subject":"","teacher":"","location":""},"bhaskar":{"subject":"","teacher":"","location":""}},"12:00-12:30":{"aditya":{"subject":"","teacher":"","location":""},"ravi":{"subject":"","teacher":"","location":""},"bhaskar":{"subject":"","teacher":"","location":""}}}}};
+
+var state = { view: 'full', group: '', teacher: '', day: 'all' };
+
+/* ---------- helpers ---------- */
+function esc(s){
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function hslToHex(h, s, l){
+  s /= 100; l /= 100;
+  var a = s * Math.min(l, 1 - l);
+  var f = function(n){
+    var k = (n + h / 30) % 12;
+    var c = l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1));
+    return Math.round(255 * c).toString(16).padStart(2, '0');
+  };
+  return '#' + f(0) + f(8) + f(4);
+}
+function colorForSubject(subject){
+  var hash = 0;
+  for (var i = 0; i < subject.length; i++){
+    hash = ((hash << 5) - hash) + subject.charCodeAt(i);
+    hash = hash & hash;
+  }
+  return hslToHex(Math.abs(hash) % 360, 70, 80);
+}
+function groupByKey(key){
+  for (var i = 0; i < DATA.groups.length; i++)
+    if (DATA.groups[i].key === key) return DATA.groups[i];
+  return null;
+}
+function teachersInWeek(){
+  var seen = {}, list = [];
+  DATA.days.forEach(function(day){
+    var dayData = DATA.week[day] || {};
+    DATA.slots.forEach(function(slot){
+      var slotData = dayData[slot] || {};
+      DATA.groups.forEach(function(g){
+        var cell = slotData[g.key];
+        if (cell && cell.teacher && !seen[cell.teacher]){
+          seen[cell.teacher] = true;
+          list.push(cell.teacher);
+        }
+      });
+    });
+  });
+  return list;
+}
+function activeDays(){
+  return state.day === 'all' ? DATA.days : [state.day];
+}
+
+/* ---------- table builders (one table per day, wrapped for PDF paging) ---------- */
+function wrapDayTable(inner){
+  return '<div class="pdf-block tablewrap">' + inner + '</div>';
+}
+function cellHtml(cell, usedSubjects){
+  if (!cell || !cell.subject) return '<td></td>';
+  usedSubjects[cell.subject] = true;
+  var bg = colorForSubject(cell.subject);
+  var h = '<td style="background-color:' + bg + '80;">';
+  h += '<div class="subj">' + esc(cell.subject) + '</div>';
+  if (cell.teacher) h += '<div class="meta">શિક્ષક: ' + esc(cell.teacher) + '</div>';
+  if (cell.location) h += '<div class="meta">સ્થળ: ' + esc(cell.location) + '</div>';
+  h += '</td>';
+  return h;
+}
+function buildFullView(usedSubjects){
+  var html = '';
+  activeDays().forEach(function(day){
+    var dayData = DATA.week[day];
+    if (!dayData) return;
+    var t = '<table class="sched">';
+    t += '<thead><tr><th class="daytitle" colspan="' + (DATA.groups.length + 1) + '">' + esc(day) + '</th></tr>';
+    t += '<tr><th>સમય</th>';
+    DATA.groups.forEach(function(g){ t += '<th>' + esc(g.name) + ' (' + esc(g.age) + ')</th>'; });
+    t += '</tr></thead><tbody>';
+    DATA.slots.forEach(function(slot){
+      var slotData = dayData[slot];
+      if (!slotData) return;
+      var any = DATA.groups.some(function(g){ var c = slotData[g.key]; return c && c.subject; });
+      if (!any) return;
+      t += '<tr><td class="time">' + esc(slot) + '</td>';
+      DATA.groups.forEach(function(g){ t += cellHtml(slotData[g.key], usedSubjects); });
+      t += '</tr>';
+    });
+    t += '</tbody></table>';
+    html += wrapDayTable(t);
+  });
+  return html;
+}
+function buildGroupView(usedSubjects){
+  var g = groupByKey(state.group);
+  if (!g) return '';
+  var html = '';
+  activeDays().forEach(function(day){
+    var dayData = DATA.week[day] || {};
+    var rows = '';
+    DATA.slots.forEach(function(slot){
+      var cell = (dayData[slot] || {})[g.key];
+      if (!cell || !cell.subject) return;
+      usedSubjects[cell.subject] = true;
+      var bg = colorForSubject(cell.subject);
+      rows += '<tr><td class="time">' + esc(slot) + '</td>';
+      rows += '<td style="background-color:' + bg + '80;"><span class="subj">' + esc(cell.subject) + '</span></td>';
+      rows += '<td>' + esc(cell.teacher || '—') + '</td>';
+      rows += '<td>' + esc(cell.location || '—') + '</td></tr>';
+    });
+    if (!rows){
+      if (state.day === 'all') return; // skip empty days in the all-days view
+      rows = '<tr><td class="empty" colspan="4">કોઈ પ્રવૃત્તિ નથી</td></tr>';
+    }
+    var t = '<table class="sched">';
+    t += '<thead><tr><th class="daytitle" colspan="4">' + esc(day) + '</th></tr>';
+    t += '<tr><th>સમય</th><th>વિષય</th><th>શિક્ષક</th><th>સ્થળ</th></tr></thead>';
+    t += '<tbody>' + rows + '</tbody></table>';
+    html += wrapDayTable(t);
+  });
+  return html;
+}
+function buildTeacherView(usedSubjects){
+  var teacher = state.teacher;
+  if (!teacher) return '';
+  var html = '';
+  activeDays().forEach(function(day){
+    var dayData = DATA.week[day] || {};
+    var rows = '';
+    DATA.slots.forEach(function(slot){
+      var slotData = dayData[slot] || {};
+      DATA.groups.forEach(function(g){
+        var cell = slotData[g.key];
+        if (!cell || !cell.subject || cell.teacher !== teacher) return;
+        usedSubjects[cell.subject] = true;
+        var bg = colorForSubject(cell.subject);
+        rows += '<tr><td class="time">' + esc(slot) + '</td>';
+        rows += '<td>' + esc(g.name) + ' (' + esc(g.age) + ')</td>';
+        rows += '<td style="background-color:' + bg + '80;"><span class="subj">' + esc(cell.subject) + '</span></td>';
+        rows += '<td>' + esc(cell.location || '—') + '</td></tr>';
+      });
+    });
+    if (!rows){
+      if (state.day === 'all') return;
+      rows = '<tr><td class="empty" colspan="4">કોઈ પ્રવૃત્તિ નથી</td></tr>';
+    }
+    var t = '<table class="sched">';
+    t += '<thead><tr><th class="daytitle" colspan="4">' + esc(day) + '</th></tr>';
+    t += '<tr><th>સમય</th><th>જૂથ</th><th>વિષય</th><th>સ્થળ</th></tr></thead>';
+    t += '<tbody>' + rows + '</tbody></table>';
+    html += wrapDayTable(t);
+  });
+  return html;
+}
+function buildLegend(usedSubjects){
+  var keys = Object.keys(usedSubjects);
+  if (!keys.length) return '';
+  var h = '<div class="legend pdf-block">';
+  keys.forEach(function(s){
+    h += '<div class="lg-item"><span class="lg-swatch" style="background-color:' + colorForSubject(s) + '"></span>' + esc(s) + '</div>';
+  });
+  h += '</div>';
+  return h;
+}
+
+/* ---------- selection labels & filenames ---------- */
+function selectionLabel(){
+  var parts = [];
+  if (state.view === 'group'){
+    var g = groupByKey(state.group);
+    if (g) parts.push('જૂથ: ' + g.name + ' (' + g.age + ')');
+  } else if (state.view === 'teacher'){
+    parts.push('શિક્ષક: ' + state.teacher);
+  }
+  if (state.day !== 'all') parts.push('દિવસ: ' + state.day);
+  return parts.join('  •  ');
+}
+function fileBaseName(){
+  var parts = ['samay-patrak'];
+  if (state.view === 'group'){
+    var g = groupByKey(state.group);
+    parts.push(g ? g.name : state.group);
+  } else if (state.view === 'teacher'){
+    parts.push(state.teacher);
+  }
+  if (state.day !== 'all') parts.push(state.day);
+  return parts.join('-').replace(/[\\/:*?"<>|\s]+/g, '-');
+}
+
+/* ---------- render ---------- */
+function render(){
+  document.getElementById('groupCtrl').style.display = state.view === 'group' ? '' : 'none';
+  document.getElementById('teacherCtrl').style.display = state.view === 'teacher' ? '' : 'none';
+  document.getElementById('selInfo').textContent = selectionLabel();
+
+  var usedSubjects = {};
+  var html = '';
+  if (state.view === 'group') html = buildGroupView(usedSubjects);
+  else if (state.view === 'teacher') html = buildTeacherView(usedSubjects);
+  else html = buildFullView(usedSubjects);
+
+  if (!html) html = '<p style="text-align:center;color:var(--mu)">કોઈ માહિતી નથી</p>';
+  html += buildLegend(usedSubjects);
+  document.getElementById('printArea').innerHTML = html;
+}
+
+/* ---------- downloads ---------- */
+function setBusy(busy){
+  document.getElementById('imgBtn').disabled = busy;
+  document.getElementById('pdfBtn').disabled = busy;
+}
+async function downloadImage(){
+  setBusy(true);
+  try {
+    await document.fonts.ready;
+    var el = document.getElementById('capture');
+    var canvas = await html2canvas(el, { scale: 2, backgroundColor: '#FBF7F2', useCORS: true });
+    var a = document.createElement('a');
+    a.download = fileBaseName() + '.png';
+    a.href = canvas.toDataURL('image/png');
+    a.click();
+  } catch (e) {
+    alert('ઇમેજ બનાવવામાં ભૂલ: ' + e.message);
+  } finally {
+    setBusy(false);
+  }
+}
+async function downloadPDF(){
+  setBusy(true);
+  try {
+    await document.fonts.ready;
+    var jsPDF = window.jspdf.jsPDF;
+    var pdf = new jsPDF('p', 'mm', 'a4');
+    var pageW = 210, pageH = 297, margin = 10, gap = 4;
+    var y = margin;
+    // Render each day-table (and the header/legend) as its own image so
+    // page breaks always fall between tables, never through a row.
+    var blocks = document.querySelectorAll('#capture .pdf-block');
+    for (var i = 0; i < blocks.length; i++){
+      var canvas = await html2canvas(blocks[i], { scale: 2, backgroundColor: '#ffffff', useCORS: true });
+      var w = pageW - 2 * margin;
+      var h = canvas.height * w / canvas.width;
+      if (h > pageH - 2 * margin){ // a single table taller than a page: shrink to fit
+        h = pageH - 2 * margin;
+        w = canvas.width * h / canvas.height;
+      }
+      if (y + h > pageH - margin && y > margin){
+        pdf.addPage();
+        y = margin;
+      }
+      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', margin, y, w, h);
+      y += h + gap;
+    }
+    pdf.save(fileBaseName() + '.pdf');
+  } catch (e) {
+    alert('PDF બનાવવામાં ભૂલ: ' + e.message);
+  } finally {
+    setBusy(false);
+  }
+}
+
+/* ---------- init ---------- */
+(function init(){
+  var groupSel = document.getElementById('groupSel');
+  DATA.groups.forEach(function(g){
+    var o = document.createElement('option');
+    o.value = g.key; o.textContent = g.name + ' (' + g.age + ')';
+    groupSel.appendChild(o);
+  });
+  state.group = DATA.groups.length ? DATA.groups[0].key : '';
+
+  var teacherSel = document.getElementById('teacherSel');
+  var teachers = teachersInWeek();
+  teachers.forEach(function(t){
+    var o = document.createElement('option');
+    o.value = t; o.textContent = t;
+    teacherSel.appendChild(o);
+  });
+  state.teacher = teachers.length ? teachers[0] : '';
+
+  var daySel = document.getElementById('daySel');
+  var all = document.createElement('option');
+  all.value = 'all'; all.textContent = 'બધા દિવસ';
+  daySel.appendChild(all);
+  DATA.days.forEach(function(d){
+    var o = document.createElement('option');
+    o.value = d; o.textContent = d;
+    daySel.appendChild(o);
+  });
+
+  document.getElementById('viewSel').onchange = function(){ state.view = this.value; render(); };
+  groupSel.onchange = function(){ state.group = this.value; render(); };
+  teacherSel.onchange = function(){ state.teacher = this.value; render(); };
+  daySel.onchange = function(){ state.day = this.value; render(); };
+
+  render();
+})();
+</script>
+</body>
+</html>
