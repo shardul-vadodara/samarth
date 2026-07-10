@@ -366,13 +366,24 @@ function hslToHex(h, s, l){
   const toHex = x => Math.round(255*x).toString(16).padStart(2,'0');
   return '#' + toHex(f(0)) + toHex(f(8)) + toHex(f(4));
 }
+/* Curated categorical palette: consecutive entries jump across hue families
+   and vary in depth, so subjects adjacent in the sorted list stay clearly
+   distinguishable (evenly-spaced hues made neighbors look identical).
+   Keep in sync with generate-schedules.js and V2. */
+var SUBJECT_PALETTE = [
+  [25,90,82],[205,75,80],[95,60,80],[320,70,84],[55,85,78],[255,65,84],
+  [0,80,84],[170,60,76],[35,60,70],[285,55,82],[140,55,72],[225,60,74],
+  [10,65,74],[75,55,70],[300,45,74],[190,70,68],[45,90,66],[340,60,74],
+  [120,40,84],[265,45,70],[155,70,86],[215,45,88],[355,45,88],[85,70,88]
+];
 function colorForSubject(subject){
   if(!subject) return 'transparent';
   const list = DATA.subjects.slice().sort((a,b)=>a.localeCompare(b,'gu'));
   let idx = list.indexOf(subject);
   if(idx === -1) idx = 0;
-  const hue = Math.round((idx * (360 / Math.max(list.length,1))) % 360);
-  return hslToHex(hue, 58, 87);
+  const p = SUBJECT_PALETTE[idx % SUBJECT_PALETTE.length];
+  const l = Math.max(60, p[2] - 8 * Math.floor(idx / SUBJECT_PALETTE.length));
+  return hslToHex(p[0], p[1], l);
 }
 function cellBg(subj){ return state.color && subj ? 'background:'+colorForSubject(subj) : ''; }
 
