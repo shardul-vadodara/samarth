@@ -120,6 +120,17 @@ table.wtab td.pic{background:var(--brand-lt);color:var(--brand-dk);font-weight:7
 .esubj{font-weight:700;font-size:14px}
 .emptycell .esubj{color:#c8bcab;font-weight:600}
 .emeta{font-size:11.5px;color:var(--mu)}
+.selbox{display:flex;align-items:center;padding:2px}
+.selbox input{width:19px;height:19px;accent-color:var(--brand)}
+.editslot.selon{border-color:var(--brand);border-width:1.5px;background:var(--brand-xlt)}
+#selBar{position:fixed;left:12px;right:12px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:26;display:flex;align-items:center;gap:9px;background:#332417;color:#fff;border-radius:14px;padding:10px 13px;box-shadow:0 8px 28px rgba(0,0,0,.3)}
+#selBar .selinfo{flex:1;font-size:12.5px;font-weight:700;line-height:1.3}
+#selBar .btn{padding:9px 13px;font-size:13px}
+#selBar .btn.sec{background:transparent;color:#fff;border-color:rgba(255,255,255,.45)}
+#selBar .btn[disabled]{opacity:.45}
+table.wtab td.tdc{cursor:pointer}
+table.wtab td.tdc:hover{outline:2px solid var(--brand);outline-offset:-2px}
+table.wtab td.confbad{box-shadow:inset 0 0 0 2px var(--warn)}
 
 /* ---------- Manage chips ---------- */
 .mchips{display:flex;flex-wrap:wrap;gap:8px}
@@ -150,6 +161,7 @@ table.wtab td.pic{background:var(--brand-lt);color:var(--brand-dk);font-weight:7
 /* ---------- Desktop ---------- */
 @media(min-width:900px){
   main{padding-bottom:28px}
+  #selBar{left:auto;right:24px;bottom:20px;min-width:420px}
   .bottomnav{display:none}
   .desktabs{display:flex}
   .desktabs .navbtn{flex-direction:row;gap:7px;font-size:13.5px;padding:9px 14px;border-radius:999px}
@@ -220,6 +232,10 @@ table.wtab td.pic{background:var(--brand-lt);color:var(--brand-dk);font-weight:7
 
   <!-- ============ ફેરફાર (EDIT) ============ -->
   <section class="panel" id="panel-edit" hidden>
+    <div class="rowsplit" style="margin:0 0 10px">
+      <div class="seg" id="editModeSeg"></div>
+      <span class="hint">કોષ પર ટૅપ કરીને ફેરફાર કરો</span>
+    </div>
     <div class="chiprow days" id="editDayRow"></div>
     <div class="card picnicbar" id="picnicBar"></div>
     <div id="editList"></div>
@@ -272,6 +288,7 @@ table.wtab td.pic{background:var(--brand-lt);color:var(--brand-dk);font-weight:7
   <div class="sheet" id="sheetBody"></div>
 </div>
 
+<div id="selBar" hidden></div>
 <div id="toast"></div>
 <nav class="bottomnav" id="bottomNav"></nav>
 
@@ -306,11 +323,17 @@ function defaultDay(){ const i = todayIndex(); return DATA.days[i>=0 ? i : 0]; }
 var state = {
   tab:'view', view:'full',
   mode: window.matchMedia('(min-width:900px)').matches ? 'week' : 'day',
+  editMode:'day',
   day: defaultDay(), editDay: defaultDay(),
   groupKey: DATA.groups[0].key,
   teacherName: DATA.teachers[0] || '',
   color: true
 };
+
+/* Slot copy/paste: slotSel holds selected {day, slot} targets; copyBuf holds
+   copied slot contents (all groups) until pasted or cancelled. */
+var slotSel = [];
+var copyBuf = null;
 
 /* ================= HELPERS ================= */
 function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -403,6 +426,7 @@ function setTab(t){
   if(t==='view'){ renderViewControls(); renderSchedule(); }
   if(t==='edit'){ renderEdit(); }
   if(t==='more'){ renderLists(); updateFileHints(); }
+  renderSelBar();
   window.scrollTo(0,0);
 }
 
@@ -417,11 +441,16 @@ document.addEventListener('click', function(e){
     case 'mode': state.mode = a.mode; renderViewControls(); renderSchedule(); break;
     case 'day': state.day = a.day; renderViewControls(); renderSchedule(); break;
     case 'editday': state.editDay = a.day; renderEdit(); break;
+    case 'editmode': state.editMode = a.mode; renderEdit(); break;
     case 'entity':
       if(state.view==='group') state.groupKey = a.key; else state.teacherName = a.key;
       renderViewControls(); renderSchedule(); break;
-    case 'cell': openSheet(state.editDay, a.slot, a.g); break;
+    case 'cell': openSheet(a.day || state.editDay, a.slot, a.g); break;
     case 'rmslot': removeSlot(a.slot); break;
+    case 'selslot': toggleSel(state.editDay, a.slot); break;
+    case 'docopy': doCopy(); break;
+    case 'dopaste': doPaste(); break;
+    case 'selcancel': slotSel = []; copyBuf = null; renderEdit(); break;
     case 'sheetset': sheetSet(a.field, a.value || ''); break;
     case 'sheetall': sheetApplyAll(); break;
     case 'sheetclear': sheetClear(); break;
@@ -563,14 +592,31 @@ function buildWeekTable(){
 
 /* ================= EDIT TAB ================= */
 function renderEdit(){
-  document.getElementById('editDayRow').innerHTML =
-    DATA.days.map(d=>chipBtn(d, d===state.editDay, {act:'editday', day:d}, (picnic[d]&&picnic[d].on)?'🧺 ':'')).join('');
-  renderPicnicBar();
+  document.getElementById('editModeSeg').innerHTML =
+    segHTML([['day','દિવસ'],['week','આખું સપ્તાહ']], state.editMode, 'editmode', 'mode');
+  const dayRow = document.getElementById('editDayRow');
+  const pb = document.getElementById('picnicBar');
+  if(state.editMode === 'week'){
+    dayRow.style.display = 'none';
+    pb.style.display = 'none';
+    document.getElementById('editList').innerHTML = buildEditWeekGrid();
+  } else {
+    dayRow.style.display = 'flex';
+    pb.style.display = 'flex';
+    dayRow.innerHTML =
+      DATA.days.map(d=>chipBtn(d, d===state.editDay, {act:'editday', day:d}, (picnic[d]&&picnic[d].on)?'🧺 ':'')).join('');
+    renderPicnicBar();
+    document.getElementById('editList').innerHTML = buildEditDayCards();
+  }
+  renderSelBar();
+}
+function buildEditDayCards(){
   const day = state.editDay, wk = DATA.week1;
   let out = '';
   DATA.slots.forEach(slot=>{
     const cell = (wk[day]||{})[slot] || {};
     const conf = conflictsFor(day, slot);
+    const sel = isSel(day, slot);
     const cells = DATA.groups.map(g=>{
       const c = cell[g.key] || {};
       const filled = c.subject || c.teacher || c.location;
@@ -580,12 +626,117 @@ function renderEdit(){
         <span class="emeta">${esc(c.teacher||'')}${c.location?' · '+esc(c.location):''}</span>
       </button>`;
     }).join('');
-    out += `<div class="card editslot">
-      <div class="eshead"><span class="estime">${esc(slot)}</span>${conf.length?`<span class="confl">⚠️ ${esc(conf.join('; '))}</span>`:''}<button class="iconbtn" title="સ્લોટ કાઢો" data-act="rmslot" data-slot="${esc(slot)}">🗑️</button></div>
+    out += `<div class="card editslot${sel?' selon':''}">
+      <div class="eshead">
+        <label class="selbox" title="કોપી/પેસ્ટ માટે પસંદ કરો"><input type="checkbox" data-act="selslot" data-slot="${esc(slot)}" ${sel?'checked':''}></label>
+        <span class="estime">${esc(slot)}</span>${conf.length?`<span class="confl">⚠️ ${esc(conf.join('; '))}</span>`:''}<button class="iconbtn" title="સ્લોટ કાઢો" data-act="rmslot" data-slot="${esc(slot)}">🗑️</button></div>
       <div class="escells">${cells}</div>
     </div>`;
   });
-  document.getElementById('editList').innerHTML = out;
+  return out;
+}
+
+/* ---- Whole-week edit grid: every cell tappable ---- */
+function buildEditWeekGrid(){
+  const wk = DATA.week1;
+  let h1 = '<th rowspan="2">સમય</th>', h2 = '';
+  DATA.days.forEach(d=>{
+    h1 += `<th colspan="${DATA.groups.length}">${esc(d)}</th>`;
+    h2 += DATA.groups.map(g=>`<th class="sub">${esc(g.name.slice(0,2))}</th>`).join('');
+  });
+  let rows = '';
+  DATA.slots.forEach(slot=>{
+    let tds = '';
+    DATA.days.forEach(day=>{
+      if(picnic[day] && picnic[day].on){ tds += `<td class="pic" colspan="${DATA.groups.length}">${esc(picnic[day].label||'પિકનિક')}</td>`; return; }
+      const conf = conflictsFor(day, slot);
+      DATA.groups.forEach(g=>{
+        const c = ((wk[day]||{})[slot]||{})[g.key] || {};
+        const filled = c.subject || c.teacher || c.location;
+        const bad = conf.length && c.teacher && conf.some(x=>x.indexOf(c.teacher)===0);
+        tds += `<td class="tdc${filled?'':' mut'}${bad?' confbad':''}" data-act="cell" data-day="${esc(day)}" data-slot="${esc(slot)}" data-g="${esc(g.key)}" style="${cellBg(c.subject)}" title="${esc(day)} ${esc(slot)} · ${esc(gname(g.key))}">`+
+          (filled ? `<b>${esc(c.subject||'')}</b><small>${esc(c.teacher||'')}${c.location?' · '+esc(c.location):''}</small>` : '') + '</td>';
+      });
+    });
+    rows += `<tr><td class="tth">${esc(slot)}</td>${tds}</tr>`;
+  });
+  return `<div class="scrollx"><table class="wtab"><thead><tr>${h1}</tr><tr>${h2}</tr></thead><tbody>${rows}</tbody></table></div>`+
+    `<p class="hint" style="margin-bottom:10px">કોઈપણ કોષ પર ટૅપ કરો — આખું સપ્તાહ જોતાં જોતાં ફેરફાર થશે. લાલ કિનારી = શિક્ષક એક જ સમયે બે સ્થળે.</p>`;
+}
+
+/* ---- Slot selection + copy/paste ---- */
+function isSel(day, slot){ return slotSel.some(x=>x.day===day && x.slot===slot); }
+function toggleSel(day, slot){
+  if(isSel(day, slot)) slotSel = slotSel.filter(x=>!(x.day===day && x.slot===slot));
+  else slotSel.push({day:day, slot:slot});
+  renderEdit();
+}
+function sortedSel(){
+  return slotSel.slice().sort((a,b)=>{
+    const d = DATA.days.indexOf(a.day) - DATA.days.indexOf(b.day);
+    return d !== 0 ? d : DATA.slots.indexOf(a.slot) - DATA.slots.indexOf(b.slot);
+  });
+}
+function renderSelBar(){
+  const bar = document.getElementById('selBar');
+  if(state.tab !== 'edit' || (!slotSel.length && !copyBuf)){ bar.hidden = true; return; }
+  bar.hidden = false;
+  if(!copyBuf){
+    bar.innerHTML = `<span class="selinfo">${slotSel.length} સ્લોટ પસંદ</span>
+      <button class="btn" data-act="docopy">કોપી કરો</button>
+      <button class="btn sec" data-act="selcancel">રદ</button>`;
+  } else {
+    bar.innerHTML = `<span class="selinfo">📋 ${copyBuf.length} સ્લોટ કોપી થયા — જ્યાં મૂકવા હોય તે પસંદ કરો (${slotSel.length} પસંદ)</span>
+      <button class="btn" data-act="dopaste" ${slotSel.length?'':'disabled'}>પેસ્ટ કરો</button>
+      <button class="btn sec" data-act="selcancel">રદ</button>`;
+  }
+}
+function doCopy(){
+  const src = sortedSel();
+  if(!src.length) return;
+  copyBuf = src.map(x=>({
+    from: x.day + ' ' + x.slot,
+    content: JSON.parse(JSON.stringify((DATA.week1[x.day]||{})[x.slot] || {}))
+  }));
+  slotSel = [];
+  renderEdit();
+  toast(copyBuf.length + ' સ્લોટ કોપી થયા — હવે લક્ષ્ય સ્લોટ પસંદ કરી "પેસ્ટ કરો" દબાવો (બીજા દિવસે પણ જઈ શકાય)');
+}
+function doPaste(){
+  if(!copyBuf) return;
+  const targets = sortedSel();
+  if(!targets.length) return;
+  const n = copyBuf.length, m = targets.length;
+  let pairs = [];
+  if(n === m){
+    pairs = targets.map((t,i)=>[t, copyBuf[i]]);
+  } else if(m === 1){
+    // paste the copied sequence starting at the chosen slot, downwards
+    const day = targets[0].day;
+    const start = DATA.slots.indexOf(targets[0].slot);
+    for(let i=0; i<n && start+i < DATA.slots.length; i++){
+      pairs.push([{day:day, slot:DATA.slots[start+i]}, copyBuf[i]]);
+    }
+  } else if(n === 1){
+    pairs = targets.map(t=>[t, copyBuf[0]]);
+  } else {
+    toast('કોપી કરેલા (' + n + ') અને પસંદ કરેલા (' + m + ') સ્લોટની સંખ્યા મળતી નથી — સરખી સંખ્યા પસંદ કરો, અથવા ફક્ત ૧ પસંદ કરો');
+    return;
+  }
+  pairs.forEach(pair=>{
+    const t = pair[0], src = pair[1];
+    const dayObj = DATA.week1[t.day] = DATA.week1[t.day] || {};
+    const dest = dayObj[t.slot] = dayObj[t.slot] || {};
+    DATA.groups.forEach(g=>{
+      const c = (src.content||{})[g.key] || {};
+      dest[g.key] = {subject:c.subject||'', teacher:c.teacher||'', location:c.location||''};
+    });
+  });
+  slotSel = [];
+  copyBuf = null;
+  markDirty();
+  renderEdit();
+  toast(pairs.length + ' સ્લોટમાં પેસ્ટ થયું ✓');
 }
 function renderPicnicBar(){
   const d = state.editDay, p = picnic[d];
@@ -679,6 +830,7 @@ function removeSlot(slot){
   if(!confirm('"'+slot+'" સ્લોટ બધા દિવસોમાંથી કાઢી નાખવામાં આવશે. ચાલુ રાખવું?')) return;
   DATA.slots = DATA.slots.filter(s=>s!==slot);
   DATA.days.forEach(day=>{ delete DATA.week1[day][slot]; });
+  slotSel = slotSel.filter(x=>x.slot!==slot);
   markDirty(); renderEdit();
 }
 
