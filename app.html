@@ -131,6 +131,7 @@ table.wtab td.pic{background:var(--brand-lt);color:var(--brand-dk);font-weight:7
 table.wtab td.tdc{cursor:pointer}
 table.wtab td.tdc:hover{outline:2px solid var(--brand);outline-offset:-2px}
 table.wtab td.confbad{box-shadow:inset 0 0 0 2px var(--warn)}
+table.wtab td.selcell{outline:3px solid var(--brand);outline-offset:-3px;background:var(--brand-lt)}
 
 /* ---------- Manage chips ---------- */
 .mchips{display:flex;flex-wrap:wrap;gap:8px}
@@ -331,9 +332,11 @@ var state = {
 };
 
 /* Slot copy/paste: slotSel holds selected {day, slot} targets; copyBuf holds
-   copied slot contents (all groups) until pasted or cancelled. */
+   copied slot contents (all groups) until pasted or cancelled. weekSelMode
+   makes taps in the week grid select slots instead of opening the editor. */
 var slotSel = [];
 var copyBuf = null;
+var weekSelMode = false;
 
 /* ================= HELPERS ================= */
 function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -445,12 +448,16 @@ document.addEventListener('click', function(e){
     case 'entity':
       if(state.view==='group') state.groupKey = a.key; else state.teacherName = a.key;
       renderViewControls(); renderSchedule(); break;
-    case 'cell': openSheet(a.day || state.editDay, a.slot, a.g); break;
+    case 'cell':
+      if(state.tab==='edit' && state.editMode==='week' && weekSelMode) toggleSel(a.day, a.slot);
+      else openSheet(a.day || state.editDay, a.slot, a.g);
+      break;
     case 'rmslot': removeSlot(a.slot); break;
     case 'selslot': toggleSel(state.editDay, a.slot); break;
+    case 'weeksel': weekSelMode = !weekSelMode; renderEdit(); break;
     case 'docopy': doCopy(); break;
     case 'dopaste': doPaste(); break;
-    case 'selcancel': slotSel = []; copyBuf = null; renderEdit(); break;
+    case 'selcancel': slotSel = []; copyBuf = null; weekSelMode = false; renderEdit(); break;
     case 'sheetset': sheetSet(a.field, a.value || ''); break;
     case 'sheetall': sheetApplyAll(); break;
     case 'sheetclear': sheetClear(); break;
@@ -650,18 +657,25 @@ function buildEditWeekGrid(){
     DATA.days.forEach(day=>{
       if(picnic[day] && picnic[day].on){ tds += `<td class="pic" colspan="${DATA.groups.length}">${esc(picnic[day].label||'પિકનિક')}</td>`; return; }
       const conf = conflictsFor(day, slot);
+      const sel = weekSelMode && isSel(day, slot);
       DATA.groups.forEach(g=>{
         const c = ((wk[day]||{})[slot]||{})[g.key] || {};
         const filled = c.subject || c.teacher || c.location;
         const bad = conf.length && c.teacher && conf.some(x=>x.indexOf(c.teacher)===0);
-        tds += `<td class="tdc${filled?'':' mut'}${bad?' confbad':''}" data-act="cell" data-day="${esc(day)}" data-slot="${esc(slot)}" data-g="${esc(g.key)}" style="${cellBg(c.subject)}" title="${esc(day)} ${esc(slot)} · ${esc(gname(g.key))}">`+
+        tds += `<td class="tdc${filled?'':' mut'}${bad?' confbad':''}${sel?' selcell':''}" data-act="cell" data-day="${esc(day)}" data-slot="${esc(slot)}" data-g="${esc(g.key)}" style="${cellBg(c.subject)}" title="${esc(day)} ${esc(slot)} · ${esc(gname(g.key))}">`+
           (filled ? `<b>${esc(c.subject||'')}</b><small>${esc(c.teacher||'')}${c.location?' · '+esc(c.location):''}</small>` : '') + '</td>';
       });
     });
     rows += `<tr><td class="tth">${esc(slot)}</td>${tds}</tr>`;
   });
-  return `<div class="scrollx"><table class="wtab"><thead><tr>${h1}</tr><tr>${h2}</tr></thead><tbody>${rows}</tbody></table></div>`+
-    `<p class="hint" style="margin-bottom:10px">કોઈપણ કોષ પર ટૅપ કરો — આખું સપ્તાહ જોતાં જોતાં ફેરફાર થશે. લાલ કિનારી = શિક્ષક એક જ સમયે બે સ્થળે.</p>`;
+  const selBtn = `<div class="btnrow" style="margin:0 0 10px">
+    <button class="btn${weekSelMode?'':' sec'}" data-act="weeksel">${weekSelMode ? '✓ પસંદ મોડ ચાલુ — કોષ ટૅપ કરી સ્લોટ પસંદ કરો' : '☑️ સ્લોટ પસંદ કરો (કોપી/પેસ્ટ)'}</button>
+  </div>`;
+  const hint = weekSelMode
+    ? 'ટૅપ = સ્લોટ પસંદ (એ દિવસનો આખો સ્લોટ, ત્રણેય જૂથ). ગમે તેટલા દિવસ/સ્લોટ પસંદ કરી નીચેની પટ્ટીથી કોપી/પેસ્ટ કરો.'
+    : 'કોઈપણ કોષ પર ટૅપ કરો — આખું સપ્તાહ જોતાં જોતાં ફેરફાર થશે. લાલ કિનારી = શિક્ષક એક જ સમયે બે સ્થળે.';
+  return selBtn + `<div class="scrollx"><table class="wtab"><thead><tr>${h1}</tr><tr>${h2}</tr></thead><tbody>${rows}</tbody></table></div>`+
+    `<p class="hint" style="margin-bottom:10px">${hint}</p>`;
 }
 
 /* ---- Slot selection + copy/paste ---- */
@@ -734,6 +748,7 @@ function doPaste(){
   });
   slotSel = [];
   copyBuf = null;
+  weekSelMode = false;
   markDirty();
   renderEdit();
   toast(pairs.length + ' સ્લોટમાં પેસ્ટ થયું ✓');
