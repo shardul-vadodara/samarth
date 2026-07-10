@@ -331,11 +331,17 @@ var state = {
   color: true
 };
 
-/* Slot copy/paste: slotSel holds selected {day, slot} targets; copyBuf holds
-   copied slot contents (all groups) until pasted or cancelled. weekSelMode
-   makes taps in the week grid select slots instead of opening the editor. */
+/* Copy/paste works at two levels, each with its own selection + buffer:
+   - Slots (day view checkboxes): slotSel {day,slot} + copyBuf — a whole time
+     row, all groups at once.
+   - Cells (week grid select mode / editor sheet): cellSel {day,slot,g} +
+     cellBuf — one group's single entry (subject/teacher/location).
+   weekSelMode makes taps in the week grid select cells instead of opening
+   the editor. The two flows are exclusive: starting one clears the other. */
 var slotSel = [];
 var copyBuf = null;
+var cellSel = [];
+var cellBuf = null;
 var weekSelMode = false;
 
 /* ================= HELPERS ================= */
@@ -449,15 +455,22 @@ document.addEventListener('click', function(e){
       if(state.view==='group') state.groupKey = a.key; else state.teacherName = a.key;
       renderViewControls(); renderSchedule(); break;
     case 'cell':
-      if(state.tab==='edit' && state.editMode==='week' && weekSelMode) toggleSel(a.day, a.slot);
+      if(state.tab==='edit' && state.editMode==='week' && weekSelMode) toggleCellSel(a.day, a.slot, a.g);
       else openSheet(a.day || state.editDay, a.slot, a.g);
       break;
     case 'rmslot': removeSlot(a.slot); break;
-    case 'selslot': toggleSel(state.editDay, a.slot); break;
-    case 'weeksel': weekSelMode = !weekSelMode; renderEdit(); break;
+    case 'selslot': cellSel = []; cellBuf = null; toggleSel(state.editDay, a.slot); break;
+    case 'weeksel':
+      weekSelMode = !weekSelMode;
+      if(weekSelMode){ slotSel = []; copyBuf = null; }
+      renderEdit(); break;
     case 'docopy': doCopy(); break;
     case 'dopaste': doPaste(); break;
-    case 'selcancel': slotSel = []; copyBuf = null; weekSelMode = false; renderEdit(); break;
+    case 'docellcopy': doCellCopy(); break;
+    case 'docellpaste': doCellPaste(); break;
+    case 'sheetcopy': sheetCopy(); break;
+    case 'sheetpaste': sheetPaste(); break;
+    case 'selcancel': slotSel = []; copyBuf = null; cellSel = []; cellBuf = null; weekSelMode = false; renderEdit(); break;
     case 'sheetset': sheetSet(a.field, a.value || ''); break;
     case 'sheetall': sheetApplyAll(); break;
     case 'sheetclear': sheetClear(); break;
@@ -657,11 +670,11 @@ function buildEditWeekGrid(){
     DATA.days.forEach(day=>{
       if(picnic[day] && picnic[day].on){ tds += `<td class="pic" colspan="${DATA.groups.length}">${esc(picnic[day].label||'પિકનિક')}</td>`; return; }
       const conf = conflictsFor(day, slot);
-      const sel = weekSelMode && isSel(day, slot);
       DATA.groups.forEach(g=>{
         const c = ((wk[day]||{})[slot]||{})[g.key] || {};
         const filled = c.subject || c.teacher || c.location;
         const bad = conf.length && c.teacher && conf.some(x=>x.indexOf(c.teacher)===0);
+        const sel = weekSelMode && isCellSel(day, slot, g.key);
         tds += `<td class="tdc${filled?'':' mut'}${bad?' confbad':''}${sel?' selcell':''}" data-act="cell" data-day="${esc(day)}" data-slot="${esc(slot)}" data-g="${esc(g.key)}" style="${cellBg(c.subject)}" title="${esc(day)} ${esc(slot)} · ${esc(gname(g.key))}">`+
           (filled ? `<b>${esc(c.subject||'')}</b><small>${esc(c.teacher||'')}${c.location?' · '+esc(c.location):''}</small>` : '') + '</td>';
       });
@@ -669,10 +682,10 @@ function buildEditWeekGrid(){
     rows += `<tr><td class="tth">${esc(slot)}</td>${tds}</tr>`;
   });
   const selBtn = `<div class="btnrow" style="margin:0 0 10px">
-    <button class="btn${weekSelMode?'':' sec'}" data-act="weeksel">${weekSelMode ? '✓ પસંદ મોડ ચાલુ — કોષ ટૅપ કરી સ્લોટ પસંદ કરો' : '☑️ સ્લોટ પસંદ કરો (કોપી/પેસ્ટ)'}</button>
+    <button class="btn${weekSelMode?'':' sec'}" data-act="weeksel">${weekSelMode ? '✓ પસંદ મોડ ચાલુ — કોષ ટૅપ કરી પસંદ કરો' : '☑️ કોષ પસંદ કરો (કોપી/પેસ્ટ)'}</button>
   </div>`;
   const hint = weekSelMode
-    ? 'ટૅપ = સ્લોટ પસંદ (એ દિવસનો આખો સ્લોટ, ત્રણેય જૂથ). ગમે તેટલા દિવસ/સ્લોટ પસંદ કરી નીચેની પટ્ટીથી કોપી/પેસ્ટ કરો.'
+    ? 'ટૅપ = કોષ પસંદ (એક જૂથનું એક સત્ર). ગમે તે દિવસ/સ્લોટ/જૂથના કોષ પસંદ કરી નીચેની પટ્ટીથી કોપી/પેસ્ટ કરો.'
     : 'કોઈપણ કોષ પર ટૅપ કરો — આખું સપ્તાહ જોતાં જોતાં ફેરફાર થશે. લાલ કિનારી = શિક્ષક એક જ સમયે બે સ્થળે.';
   return selBtn + `<div class="scrollx"><table class="wtab"><thead><tr>${h1}</tr><tr>${h2}</tr></thead><tbody>${rows}</tbody></table></div>`+
     `<p class="hint" style="margin-bottom:10px">${hint}</p>`;
@@ -693,9 +706,21 @@ function sortedSel(){
 }
 function renderSelBar(){
   const bar = document.getElementById('selBar');
-  if(state.tab !== 'edit' || (!slotSel.length && !copyBuf)){ bar.hidden = true; return; }
+  const cellActive = cellSel.length || cellBuf;
+  const slotActive = slotSel.length || copyBuf;
+  if(state.tab !== 'edit' || (!cellActive && !slotActive)){ bar.hidden = true; return; }
   bar.hidden = false;
-  if(!copyBuf){
+  if(cellActive){
+    if(!cellBuf){
+      bar.innerHTML = `<span class="selinfo">${cellSel.length} કોષ પસંદ</span>
+        <button class="btn" data-act="docellcopy">કોપી કરો</button>
+        <button class="btn sec" data-act="selcancel">રદ</button>`;
+    } else {
+      bar.innerHTML = `<span class="selinfo">📋 ${cellBuf.length} કોષ કોપી થયા — જ્યાં મૂકવા હોય તે કોષ પસંદ કરો (${cellSel.length} પસંદ)</span>
+        <button class="btn" data-act="docellpaste" ${cellSel.length?'':'disabled'}>પેસ્ટ કરો</button>
+        <button class="btn sec" data-act="selcancel">રદ</button>`;
+    }
+  } else if(!copyBuf){
     bar.innerHTML = `<span class="selinfo">${slotSel.length} સ્લોટ પસંદ</span>
       <button class="btn" data-act="docopy">કોપી કરો</button>
       <button class="btn sec" data-act="selcancel">રદ</button>`;
@@ -704,6 +729,69 @@ function renderSelBar(){
       <button class="btn" data-act="dopaste" ${slotSel.length?'':'disabled'}>પેસ્ટ કરો</button>
       <button class="btn sec" data-act="selcancel">રદ</button>`;
   }
+}
+
+/* ---- Cell-level selection + copy/paste (one group's single entry) ---- */
+function isCellSel(day, slot, g){ return cellSel.some(x=>x.day===day && x.slot===slot && x.g===g); }
+function toggleCellSel(day, slot, g){
+  if(isCellSel(day, slot, g)) cellSel = cellSel.filter(x=>!(x.day===day && x.slot===slot && x.g===g));
+  else cellSel.push({day:day, slot:slot, g:g});
+  renderEdit();
+}
+function gIdx(g){ return DATA.groups.findIndex(x=>x.key===g); }
+function sortedCellSel(){
+  return cellSel.slice().sort((a,b)=>{
+    const d = DATA.days.indexOf(a.day) - DATA.days.indexOf(b.day);
+    if(d !== 0) return d;
+    const s = DATA.slots.indexOf(a.slot) - DATA.slots.indexOf(b.slot);
+    return s !== 0 ? s : gIdx(a.g) - gIdx(b.g);
+  });
+}
+function cellContent(day, slot, g){
+  const c = (((DATA.week1[day]||{})[slot])||{})[g] || {};
+  return {subject:c.subject||'', teacher:c.teacher||'', location:c.location||''};
+}
+function putCell(day, slot, g, content){
+  const dayObj = DATA.week1[day] = DATA.week1[day] || {};
+  const slotObj = dayObj[slot] = dayObj[slot] || {};
+  slotObj[g] = {subject:content.subject||'', teacher:content.teacher||'', location:content.location||''};
+}
+function doCellCopy(){
+  const src = sortedCellSel();
+  if(!src.length) return;
+  cellBuf = src.map(x=>({content: cellContent(x.day, x.slot, x.g)}));
+  cellSel = [];
+  renderEdit();
+  toast(cellBuf.length + ' કોષ કોપી થયા — હવે લક્ષ્ય કોષ પસંદ કરી "પેસ્ટ કરો" દબાવો');
+}
+function doCellPaste(){
+  if(!cellBuf) return;
+  const targets = sortedCellSel();
+  if(!targets.length) return;
+  const n = cellBuf.length, m = targets.length;
+  let pairs = [];
+  if(n === m){
+    pairs = targets.map((t,i)=>[t, cellBuf[i]]);
+  } else if(n === 1){
+    pairs = targets.map(t=>[t, cellBuf[0]]);
+  } else if(m === 1){
+    // paste the copied sequence downwards in the target's own column
+    const t = targets[0];
+    const start = DATA.slots.indexOf(t.slot);
+    for(let i=0; i<n && start+i < DATA.slots.length; i++){
+      pairs.push([{day:t.day, slot:DATA.slots[start+i], g:t.g}, cellBuf[i]]);
+    }
+  } else {
+    toast('કોપી કરેલા (' + n + ') અને પસંદ કરેલા (' + m + ') કોષની સંખ્યા મળતી નથી — સરખી સંખ્યા પસંદ કરો, અથવા ફક્ત ૧ પસંદ કરો');
+    return;
+  }
+  pairs.forEach(pair=>{ putCell(pair[0].day, pair[0].slot, pair[0].g, pair[1].content); });
+  cellSel = [];
+  cellBuf = null;
+  weekSelMode = false;
+  markDirty();
+  renderEdit();
+  toast(pairs.length + ' કોષમાં પેસ્ટ થયું ✓');
 }
 function doCopy(){
   const src = sortedSel();
@@ -795,7 +883,11 @@ function renderSheet(){
     ${sec('શિક્ષક', DATA.teachers, 'teacher', c.teacher)}
     ${sec('સ્થળ', DATA.locations, 'location', c.location)}
     <div class="shactions">
+      <button class="btn sec" data-act="sheetcopy">📋 કોપી</button>
+      ${cellBuf && cellBuf.length===1 ? '<button class="btn sec" data-act="sheetpaste">પેસ્ટ કરો</button>' : ''}
       <button class="btn sec" data-act="sheetall">બધા જૂથોમાં આ જ</button>
+    </div>
+    <div class="shactions">
       <button class="btn danger" data-act="sheetclear">ખાલી કરો</button>
       <button class="btn" data-act="sheetclose">થઈ ગયું ✓</button>
     </div>`;
@@ -818,6 +910,19 @@ function sheetClear(){
   const c = cellOf(sheetCtx);
   c.subject = ''; c.teacher = ''; c.location = '';
   markDirty(); renderSheet(); renderEdit();
+}
+function sheetCopy(){
+  if(!sheetCtx) return;
+  cellBuf = [{content: cellContent(sheetCtx.day, sheetCtx.slot, sheetCtx.g)}];
+  cellSel = []; slotSel = []; copyBuf = null;
+  renderSheet(); renderSelBar();
+  toast('કોષ કોપી થયો — બીજો કોષ ખોલી "પેસ્ટ કરો" દબાવો, અથવા આખા સપ્તાહ મોડમાં લક્ષ્ય કોષ પસંદ કરો');
+}
+function sheetPaste(){
+  if(!sheetCtx || !cellBuf || cellBuf.length !== 1) return;
+  putCell(sheetCtx.day, sheetCtx.slot, sheetCtx.g, cellBuf[0].content);
+  markDirty(); renderSheet(); renderEdit();
+  toast('પેસ્ટ થયું ✓');
 }
 
 /* ---- Slots ---- */
