@@ -113,9 +113,12 @@ table.wtab td.pic{background:var(--brand-lt);color:var(--brand-dk);font-weight:7
 .iconbtn{border:0;background:transparent;font-size:16px;color:var(--mu);padding:6px;border-radius:8px;line-height:1}
 .iconbtn:hover{background:var(--brand-xlt)}
 .escells{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
-.edcell{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;border:1.5px solid var(--bd);border-radius:10px;padding:9px 11px;min-height:66px;background:#fff}
+.edcell{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;border:1.5px solid var(--bd);border-radius:10px;padding:9px 58px 9px 11px;min-height:66px;background:#fff;cursor:pointer;font-size:15px}
 .edcell.emptycell{border-style:dashed;background:transparent}
 .edcell:active{transform:scale(.98)}
+.cellacts{position:absolute;top:5px;right:5px;display:flex;gap:3px}
+.cellact{border:1px solid var(--bd);background:rgba(255,255,255,.85);border-radius:7px;padding:3px 6px;font-size:12.5px;line-height:1;cursor:pointer}
+.cellact:hover{background:#fff;border-color:var(--brand)}
 .egname{font-size:11px;font-weight:700;color:var(--mu)}
 .esubj{font-weight:700;font-size:14px}
 .emptycell .esubj{color:#c8bcab;font-weight:600}
@@ -468,6 +471,10 @@ document.addEventListener('click', function(e){
     case 'dopaste': doPaste(); break;
     case 'docellcopy': doCellCopy(); break;
     case 'docellpaste': doCellPaste(); break;
+    case 'ccopy': quickCellCopy(state.editDay, a.slot, a.g); break;
+    case 'cpaste': quickCellPaste(state.editDay, a.slot, a.g); break;
+    case 'scopy': quickSlotCopy(state.editDay, a.slot); break;
+    case 'spaste': quickSlotPaste(state.editDay, a.slot); break;
     case 'sheetcopy': sheetCopy(); break;
     case 'sheetpaste': sheetPaste(); break;
     case 'selcancel': slotSel = []; copyBuf = null; cellSel = []; cellBuf = null; weekSelMode = false; renderEdit(); break;
@@ -637,19 +644,27 @@ function buildEditDayCards(){
     const cell = (wk[day]||{})[slot] || {};
     const conf = conflictsFor(day, slot);
     const sel = isSel(day, slot);
+    const canCellPaste = cellBuf && cellBuf.length === 1;
     const cells = DATA.groups.map(g=>{
       const c = cell[g.key] || {};
       const filled = c.subject || c.teacher || c.location;
-      return `<button class="edcell${filled?'':' emptycell'}" data-act="cell" data-slot="${esc(slot)}" data-g="${esc(g.key)}" style="${filled?cellBg(c.subject):''}">
+      return `<div class="edcell${filled?'':' emptycell'}" data-act="cell" data-slot="${esc(slot)}" data-g="${esc(g.key)}" style="${filled?cellBg(c.subject):''}">
+        <div class="cellacts">
+          <button class="cellact" title="આ કોષ કોપી કરો" data-act="ccopy" data-slot="${esc(slot)}" data-g="${esc(g.key)}">📋</button>
+          ${canCellPaste ? `<button class="cellact" title="કોપી કરેલો કોષ અહીં પેસ્ટ કરો" data-act="cpaste" data-slot="${esc(slot)}" data-g="${esc(g.key)}">📥</button>` : ''}
+        </div>
         <span class="egname">${esc(g.name)}</span>
         <span class="esubj">${esc(c.subject || 'ખાલી — ટૅપ કરો')}</span>
         <span class="emeta">${esc(c.teacher||'')}${c.location?' · '+esc(c.location):''}</span>
-      </button>`;
+      </div>`;
     }).join('');
     out += `<div class="card editslot${sel?' selon':''}">
       <div class="eshead">
         <label class="selbox" title="કોપી/પેસ્ટ માટે પસંદ કરો"><input type="checkbox" data-act="selslot" data-slot="${esc(slot)}" ${sel?'checked':''}></label>
-        <span class="estime">${esc(slot)}</span>${conf.length?`<span class="confl">⚠️ ${esc(conf.join('; '))}</span>`:''}<button class="iconbtn" title="સ્લોટ કાઢો" data-act="rmslot" data-slot="${esc(slot)}">🗑️</button></div>
+        <span class="estime">${esc(slot)}</span>${conf.length?`<span class="confl">⚠️ ${esc(conf.join('; '))}</span>`:''}
+        <button class="iconbtn" title="આખો સ્લોટ કોપી કરો (ત્રણેય જૂથ)" data-act="scopy" data-slot="${esc(slot)}">📋</button>
+        ${copyBuf ? `<button class="iconbtn" title="કોપી કરેલા સ્લોટ અહીંથી પેસ્ટ કરો" data-act="spaste" data-slot="${esc(slot)}">📥</button>` : ''}
+        <button class="iconbtn" title="સ્લોટ કાઢો" data-act="rmslot" data-slot="${esc(slot)}">🗑️</button></div>
       <div class="escells">${cells}</div>
     </div>`;
   });
@@ -716,7 +731,7 @@ function renderSelBar(){
         <button class="btn" data-act="docellcopy">કોપી કરો</button>
         <button class="btn sec" data-act="selcancel">રદ</button>`;
     } else {
-      bar.innerHTML = `<span class="selinfo">📋 ${cellBuf.length} કોષ કોપી થયા — જ્યાં મૂકવા હોય તે કોષ પસંદ કરો (${cellSel.length} પસંદ)</span>
+      bar.innerHTML = `<span class="selinfo">📋 ${cellBuf.length} કોષ કોપી થયા — 📥 દબાવો, અથવા લક્ષ્ય કોષ પસંદ કરો (${cellSel.length} પસંદ)</span>
         <button class="btn" data-act="docellpaste" ${cellSel.length?'':'disabled'}>પેસ્ટ કરો</button>
         <button class="btn sec" data-act="selcancel">રદ</button>`;
     }
@@ -725,7 +740,7 @@ function renderSelBar(){
       <button class="btn" data-act="docopy">કોપી કરો</button>
       <button class="btn sec" data-act="selcancel">રદ</button>`;
   } else {
-    bar.innerHTML = `<span class="selinfo">📋 ${copyBuf.length} સ્લોટ કોપી થયા — જ્યાં મૂકવા હોય તે પસંદ કરો (${slotSel.length} પસંદ)</span>
+    bar.innerHTML = `<span class="selinfo">📋 ${copyBuf.length} સ્લોટ કોપી થયા — 📥 દબાવો, અથવા લક્ષ્ય સ્લોટ પસંદ કરો (${slotSel.length} પસંદ)</span>
       <button class="btn" data-act="dopaste" ${slotSel.length?'':'disabled'}>પેસ્ટ કરો</button>
       <button class="btn sec" data-act="selcancel">રદ</button>`;
   }
@@ -764,6 +779,43 @@ function doCellCopy(){
   renderEdit();
   toast(cellBuf.length + ' કોષ કોપી થયા — હવે લક્ષ્ય કોષ પસંદ કરી "પેસ્ટ કરો" દબાવો');
 }
+/* ---- One-tap copy/paste buttons shown on every slot card and cell ---- */
+function quickCellCopy(day, slot, g){
+  cellBuf = [{content: cellContent(day, slot, g)}];
+  cellSel = []; slotSel = []; copyBuf = null;
+  renderEdit();
+  toast('કોષ કોપી થયો — હવે ગમે તે કોષ પર 📥 દબાવો (દિવસ પણ બદલી શકાય)');
+}
+function quickCellPaste(day, slot, g){
+  if(!cellBuf || cellBuf.length !== 1) return;
+  putCell(day, slot, g, cellBuf[0].content);
+  markDirty(); renderEdit();
+  toast('પેસ્ટ થયું ✓ — 📥 થી બીજે પણ મૂકી શકાય');
+}
+function quickSlotCopy(day, slot){
+  copyBuf = [{from: day + ' ' + slot, content: JSON.parse(JSON.stringify((DATA.week1[day]||{})[slot] || {}))}];
+  slotSel = []; cellSel = []; cellBuf = null;
+  renderEdit();
+  toast('સ્લોટ કોપી થયો (ત્રણેય જૂથ) — હવે ગમે તે સ્લોટ પર 📥 દબાવો');
+}
+function quickSlotPaste(day, slot){
+  if(!copyBuf) return;
+  const start = DATA.slots.indexOf(slot);
+  let cnt = 0;
+  for(let i=0; i<copyBuf.length && start+i < DATA.slots.length; i++){
+    const t = DATA.slots[start+i], src = copyBuf[i];
+    const dayObj = DATA.week1[day] = DATA.week1[day] || {};
+    const dest = dayObj[t] = dayObj[t] || {};
+    DATA.groups.forEach(g=>{
+      const c = (src.content||{})[g.key] || {};
+      dest[g.key] = {subject:c.subject||'', teacher:c.teacher||'', location:c.location||''};
+    });
+    cnt++;
+  }
+  markDirty(); renderEdit();
+  toast(cnt + ' સ્લોટમાં પેસ્ટ થયું ✓ — 📥 થી બીજે પણ મૂકી શકાય');
+}
+
 function doCellPaste(){
   if(!cellBuf) return;
   const targets = sortedCellSel();
