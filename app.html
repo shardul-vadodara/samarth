@@ -101,6 +101,7 @@ table.wtab td.pic{background:var(--brand-lt);color:var(--brand-dk);font-weight:7
 .addform{display:flex;gap:8px;margin-top:10px}
 .addform input{flex:1}
 .addform button{flex:none}
+.codebox{background:#2d2318;color:#f5e9d7;font-family:Consolas,Menlo,'Courier New',monospace;font-size:12.5px;border-radius:10px;padding:12px 14px;margin:10px 0 8px;white-space:pre;overflow-x:auto;line-height:1.8;user-select:all;-webkit-user-select:all}
 
 /* ---------- Edit tab ---------- */
 .picnicbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
@@ -256,7 +257,12 @@ table.wtab td.selcell{outline:3px solid var(--brand);outline-offset:-3px;backgro
         <button class="btn sec" onclick="openDataJs()">data.js ખોલો</button>
       </div>
       <p class="hint" id="moreFileHint" style="margin-top:8px"></p>
-      <p style="margin-top:8px"><a class="link hint" href="https://shardul-vadodara.github.io/samarth/" target="_blank" rel="noopener">પબ્લિશ થયેલું સમયપત્રક જુઓ ↗</a></p>
+      <p class="hint" style="margin-top:12px"><b>સેવ કર્યા પછી</b> — કમ્પ્યુટર પર ટર્મિનલ ખોલી (પ્રોજેક્ટ ફોલ્ડરમાં) આ આદેશો ચલાવો:</p>
+      <div class="codebox" id="gitCmds">git add data.js
+git commit -m "Update schedule"
+git push origin main</div>
+      <button class="btn sec" onclick="copyGitCmds()">📋 આદેશો કોપી કરો</button>
+      <p style="margin-top:12px"><a class="link hint" href="https://shardul-vadodara.github.io/samarth/" target="_blank" rel="noopener">પબ્લિશ થયેલું સમયપત્રક જુઓ ↗</a></p>
     </div>
     <div class="card">
       <h2>શિક્ષકો</h2>
@@ -1184,6 +1190,22 @@ function handleImportFile(file){
     }catch(err){ toast('માન્ય .json ફાઇલ પસંદ કરો'); }
   };
   reader.readAsText(file);
+}
+function copyGitCmds(){
+  const text = document.getElementById('gitCmds').innerText;
+  const done = ()=> toast('આદેશો કોપી થયા ✓ — ટર્મિનલમાં પેસ્ટ કરો');
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done).catch(()=> fallbackCopy(text, done));
+  } else fallbackCopy(text, done);
+}
+function fallbackCopy(text, done){
+  const ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed'; ta.style.left = '-9999px';
+  document.body.appendChild(ta);
+  ta.select();
+  try{ document.execCommand('copy'); done(); }catch(e){ toast('કોપી ન થયું — બોક્સમાંથી જાતે કોપી કરો'); }
+  document.body.removeChild(ta);
 }
 function resetToOriginal(){
   if(!confirm('હાલના બધા ફેરફાર રદ થઈ જશે અને મૂળ ડેટા પાછો આવશે. ચાલુ રાખવું?')) return;
