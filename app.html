@@ -268,11 +268,15 @@ git push origin main</div>
     </div>
     <div class="card">
       <h2>📤 સીધું પબ્લિશ — કમ્પ્યુટર વિના</h2>
-      <p class="hint">ફોન પરથી જ data.js સીધું GitHub પર મોકલો — વેબસાઇટ આપમેળે અપડેટ થશે. એક જ વાર ટોકન બનાવી અહીં સાચવો: <a class="link" href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">ટોકન બનાવો ↗</a><br>ત્યાં: Repository access → Only select repositories → <b>samarth-schedule</b>; Permissions → Contents → <b>Read and write</b>.</p>
+      <p class="hint">ફોન પરથી જ data.js સીધું GitHub પર મોકલો — વેબસાઇટ આપમેળે અપડેટ થશે. એક જ વાર ટોકન બનાવો: <a class="link" href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">ટોકન બનાવો ↗</a><br>ત્યાં: Repository access → Only select repositories → <b>samarth-schedule</b>; Permissions → Contents → <b>Read and write</b>.</p>
       <div class="addform">
         <input class="txt" type="password" id="ghToken" placeholder="github_pat_..." autocomplete="off">
+      </div>
+      <div class="addform">
+        <input class="txt" type="password" id="ghPin" placeholder="PIN (ઓછામાં ઓછા ૪ અક્ષર)" autocomplete="off" inputmode="numeric">
         <button class="btn sec" onclick="saveGhToken()">સાચવો</button>
       </div>
+      <p class="hint">🔒 ટોકન તમારા PIN વડે એન્ક્રિપ્ટ થઈને જ સચવાય છે — PIN વગર તે વાંચી શકાતું નથી. પબ્લિશ કરતી વખતે દર વખતે PIN પૂછાશે.</p>
       <p class="hint" id="ghTokenStatus"></p>
       <div class="btnrow">
         <button class="btn" id="ghPublishBtn" onclick="publishToGitHub()">🚀 GitHub પર પબ્લિશ કરો</button>
@@ -1218,31 +1222,68 @@ function handleImportFile(file){
   };
   reader.readAsText(file);
 }
-/* ---- Direct publish to GitHub (contents API) ---- */
+/* ---- Direct publish to GitHub (contents API) ----
+   The PAT is never stored in plain text: it is AES-GCM-encrypted with a key
+   derived (PBKDF2, 200k iterations) from a user-chosen PIN. Publishing asks
+   for the PIN, decrypts in memory for that one request, and discards it.
+   A wrong PIN fails GCM authentication, so it cannot silently succeed. */
 var GH_REPO = 'shardul-vadodara/samarth-schedule';
 var GH_PATH = 'data.js';
-function ghToken(){ try{ return localStorage.getItem('shardulGhToken') || ''; }catch(e){ return ''; } }
-function saveGhToken(){
+var GH_STORE_KEY = 'shardulGhTokenEnc';
+/* remove any plaintext token stored by the previous version */
+try{ localStorage.removeItem('shardulGhToken'); }catch(e){}
+
+function b64FromBytes(bytes){ let s=''; bytes.forEach(b=>{ s += String.fromCharCode(b); }); return btoa(s); }
+function bytesFromB64(b64){ return Uint8Array.from(atob(b64), c=>c.charCodeAt(0)); }
+async function ghDeriveKey(pin, salt){
+  const keyMaterial = await crypto.subtle.importKey('raw', new TextEncoder().encode(pin), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey(
+    {name:'PBKDF2', salt: salt, iterations: 200000, hash:'SHA-256'},
+    keyMaterial, {name:'AES-GCM', length:256}, false, ['encrypt','decrypt']);
+}
+async function ghEncryptToken(token, pin){
+  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const key = await ghDeriveKey(pin, salt);
+  const ct = new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM', iv:iv}, key, new TextEncoder().encode(token)));
+  return JSON.stringify({s:b64FromBytes(salt), i:b64FromBytes(iv), c:b64FromBytes(ct)});
+}
+async function ghDecryptToken(pin){
+  const raw = localStorage.getItem(GH_STORE_KEY);
+  if(!raw) return null;
+  const o = JSON.parse(raw);
+  const key = await ghDeriveKey(pin, bytesFromB64(o.s));
+  const pt = await crypto.subtle.decrypt({name:'AES-GCM', iv:bytesFromB64(o.i)}, key, bytesFromB64(o.c));
+  return new TextDecoder().decode(pt);
+}
+function ghHasToken(){ try{ return !!localStorage.getItem(GH_STORE_KEY); }catch(e){ return false; } }
+async function saveGhToken(){
   const v = document.getElementById('ghToken').value.trim();
+  const pin = document.getElementById('ghPin').value;
   if(!v){ toast('પહેલા ટોકન લખો'); return; }
-  try{ localStorage.setItem('shardulGhToken', v); }catch(e){ toast('ટોકન સાચવી શકાયું નહીં'); return; }
+  if(!pin || pin.length < 4){ toast('ઓછામાં ઓછા ૪ અક્ષરનો PIN રાખો'); return; }
+  if(!(window.crypto && crypto.subtle)){ toast('આ બ્રાઉઝરમાં એન્ક્રિપ્શન ઉપલબ્ધ નથી'); return; }
+  try{
+    localStorage.setItem(GH_STORE_KEY, await ghEncryptToken(v, pin));
+  }catch(e){ toast('ટોકન સાચવી શકાયું નહીં'); return; }
   document.getElementById('ghToken').value = '';
+  document.getElementById('ghPin').value = '';
   renderGhStatus();
-  toast('ટોકન સાચવ્યું ✓ — હવે એક ટૅપે પબ્લિશ થશે');
+  toast('ટોકન એન્ક્રિપ્ટ કરીને સાચવ્યું ✓ — પબ્લિશ કરતી વખતે PIN પૂછાશે');
 }
 function clearGhToken(){
-  try{ localStorage.removeItem('shardulGhToken'); }catch(e){}
+  try{ localStorage.removeItem(GH_STORE_KEY); }catch(e){}
   renderGhStatus();
   toast('ટોકન કાઢી નાખ્યું');
 }
 function renderGhStatus(){
   const el = document.getElementById('ghTokenStatus');
   if(!el) return;
-  const t = ghToken();
-  el.textContent = t
-    ? 'ટોકન સાચવેલું છે (…' + t.slice(-4) + ') — ફક્ત આ બ્રાઉઝરમાં જ રહે છે.'
-    : 'હજી ટોકન સાચવેલું નથી — ઉપરના બોક્સમાં લખી "સાચવો" દબાવો.';
-  document.getElementById('ghPublishBtn').disabled = !t;
+  const has = ghHasToken();
+  el.textContent = has
+    ? '🔒 ટોકન એન્ક્રિપ્ટ થઈને સાચવેલું છે — પબ્લિશ માટે PIN લખી બટન દબાવો.'
+    : 'હજી ટોકન સાચવેલું નથી — ટોકન અને PIN લખી "સાચવો" દબાવો.';
+  document.getElementById('ghPublishBtn').disabled = !has;
 }
 function b64EncodeUtf8(str){
   const bytes = new TextEncoder().encode(str);
@@ -1264,12 +1305,23 @@ async function ghApi(method, url, token, body){
   return {res: res, data: data};
 }
 async function publishToGitHub(){
-  const token = ghToken();
-  if(!token){ toast('પહેલા GitHub ટોકન સાચવો'); return; }
+  if(!ghHasToken()){ toast('પહેલા GitHub ટોકન સાચવો'); return; }
+  const pin = document.getElementById('ghPin').value;
   const btn = document.getElementById('ghPublishBtn');
   const status = document.getElementById('ghPubStatus');
+  if(!pin){ status.textContent = '❌ ઉપરના બોક્સમાં PIN લખો, પછી પબ્લિશ દબાવો'; toast('PIN લખો'); return; }
   btn.disabled = true;
   status.textContent = '⏳ પબ્લિશ થઈ રહ્યું છે…';
+  let token;
+  try{
+    token = await ghDecryptToken(pin);
+  }catch(e){
+    status.textContent = '❌ PIN ખોટો છે';
+    toast('PIN ખોટો છે');
+    renderGhStatus();
+    return;
+  }
+  document.getElementById('ghPin').value = '';
   try{
     const base = 'https://api.github.com/repos/' + GH_REPO + '/contents/' + GH_PATH;
     async function attempt(){
