@@ -915,13 +915,13 @@ var DATA = {
       },
       "10:30-11:00": {
         "aditya": {
-          "subject": "કૃષિ",
-          "teacher": "અર્પિતભાઈ",
+          "subject": "વિજ્ઞાન",
+          "teacher": "નિસર્ગભાઈ",
           "location": "ખેતર"
         },
         "ravi": {
-          "subject": "કૃષિ",
-          "teacher": "અર્પિતભાઈ",
+          "subject": "વિજ્ઞાન",
+          "teacher": "નિસર્ગભાઈ",
           "location": "ખેતર"
         },
         "bhaskar": {
@@ -932,13 +932,13 @@ var DATA = {
       },
       "11:00-11:30": {
         "aditya": {
-          "subject": "કૃષિ",
-          "teacher": "અર્પિતભાઈ",
+          "subject": "વિજ્ઞાન",
+          "teacher": "નિસર્ગભાઈ",
           "location": "ખેતર"
         },
         "ravi": {
-          "subject": "કૃષિ",
-          "teacher": "અર્પિતભાઈ",
+          "subject": "વિજ્ઞાન",
+          "teacher": "નિસર્ગભાઈ",
           "location": "ખેતર"
         },
         "bhaskar": {
