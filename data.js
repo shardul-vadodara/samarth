@@ -797,18 +797,18 @@ var DATA = {
       "7:00-7:30": {
         "aditya": {
           "subject": "ક્રીડા",
-          "teacher": "સંજયભાઈ",
-          "location": "મંદિર"
+          "teacher": "અર્પિતભાઈ",
+          "location": "ખેતર"
         },
         "ravi": {
           "subject": "ક્રીડા",
-          "teacher": "સંજયભાઈ",
-          "location": "મંદિર"
+          "teacher": "અર્પિતભાઈ",
+          "location": "ખેતર"
         },
         "bhaskar": {
           "subject": "ક્રીડા",
-          "teacher": "સંજયભાઈ",
-          "location": "મંદિર"
+          "teacher": "અર્પિતભાઈ",
+          "location": "ખેતર"
         }
       },
       "7:30-8:00": {
