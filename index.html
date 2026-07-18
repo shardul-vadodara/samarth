@@ -40,6 +40,8 @@
   table.sched td.empty{color:var(--mu);text-align:center;font-style:italic}
   table.sched .subj{font-weight:600;color:#222;margin-bottom:3px}
   table.sched .meta{font-size:11px;color:#666}
+  table.sched td.offbanner{text-align:center;font-size:15px;font-weight:700;color:var(--saffron);background:#FFF6E0;padding:18px;letter-spacing:.02em}
+  table.sched td.offbanner.hol{color:#B42318;background:#FDECEA}
 
   .legend{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0;justify-content:center;padding:10px;background:#fff;border-radius:8px}
   .lg-item{display:flex;align-items:center;gap:6px;font-size:12px}
@@ -98,7 +100,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-var DATA = {"groups":[{"key":"aditya","name":"આદિત્ય","age":"8-10"},{"key":"ravi","name":"રવિ","age":"10-12"},{"key":"bhaskar","name":"ભાસ્કર","age":"13-15"}],"days":["સોમવાર","મંગળવાર","બુધવાર","ગુરુવાર","શુક્રવાર"],"slots":["7:00-7:30","7:30-8:00","8:00-8:30","8:30-9:00","9:00-9:30","9:30-10:00","10:00-10:30","10:30-11:00","11:00-11:30","11:30-12:00","12:00-12:30"],"subjects":["અભિવ્યક્તિ","અલ્પાહાર","આયુર્વેદ","કૃષિ","ક્રિયાકલાપ","ક્રીડા","ગણિત","ચિત્ર","ચેસ","પારાયણ","યોગ - જીવન વિજ્ઞાન","રામાયણ","વાંચન -લેખન","વાંચન -લેખન - ગણિત","વિજ્ઞાન","સંગીત","સંસ્કૃત","સ્વાધ્યાય","અંગ્રેજી","ચરિત્ર"],"week":{"સોમવાર":{"7:00-7:30":{"aditya":{"subject":"ક્રીડા","teacher":"સંજયભાઈ","location":"મંદિર"},"ravi":{"subject":"ક્રીડા","teacher":"સંજયભાઈ","location":"મંદિર"},"bhaskar":{"subject":"ક્રીડા","teacher":"સંજયભાઈ","location":"મંદિર"}},"7:30-8:00":{"aditya":{"subject":"વાંચન -લેખન - ગણિત","teacher":"સંજયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"વાંચન -લેખન - ગણિત","teacher":"સંજયભાઈ","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ગણિત","teacher":"સુમિતભાઈ","location":"અભ્યાસ ગૃહ"}},"8:00-8:30":{"aditya":{"subject":"વાંચન -લેખન - ગણિત","teacher":"સંજયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"વાંચન -લેખન - ગણિત","teacher":"સંજયભાઈ","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ગણિત","teacher":"સુમિતભાઈ","location":"અભ્યાસ ગૃહ"}},"8:30-9:00":{"aditya":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"}},"9:00-9:30":{"aditya":{"subject":"સંગીત","teacher":"દિપક ગુરુજી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"સંગીત","teacher":"દિપક ગુરુજી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"સંગીત","teacher":"દિપક ગુરુજી","location":"અભ્યાસ ગૃહ"}},"9:30-10:00":{"aditya":{"subject":"સંગીત","teacher":"દિપક ગુરુજી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"સંગીત","teacher":"દિપક ગુરુજી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"સંગીત","teacher":"દિપક ગુરુજી","location":"અભ્યાસ ગૃહ"}},"10:00-10:30":{"aditya":{"subject":"વાંચન -લેખન","teacher":"હિતેશભાઈ પોપલીયા","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"વાંચન -લેખન","teacher":"હિતેશભાઈ પોપલીયા","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ગણિત","teacher":"મનીષભાઈ","location":"અભ્યાસ ગૃહ"}},"10:30-11:00":{"aditya":{"subject":"વાંચન -લેખન","teacher":"હિતેશભાઈ પોપલીયા","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"વાંચન -લેખન","teacher":"હિતેશભાઈ પોપલીયા","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ગણિત","teacher":"મનીષભાઈ","location":"અભ્યાસ ગૃહ"}},"11:00-11:30":{"aditya":{"subject":"અભિવ્યક્તિ","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"અભિવ્યક્તિ","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"અંગ્રેજી","teacher":"હિતેશભાઈ પોપલીયા","location":"અભ્યાસ ગૃહ"}},"11:30-12:00":{"aditya":{"subject":"અભિવ્યક્તિ","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"અભિવ્યક્તિ","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"અંગ્રેજી","teacher":"હિતેશભાઈ પોપલીયા","location":"અભ્યાસ ગૃહ"}},"12:00-12:30":{"aditya":{"subject":"ક્રીડા","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"ક્રીડા","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ક્રીડા","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"}}},"મંગળવાર":{"7:00-7:30":{"aditya":{"subject":"યોગ - જીવન વિજ્ઞાન","teacher":"નિસર્ગભાઈ","location":"મંદિર"},"ravi":{"subject":"યોગ - જીવન વિજ્ઞાન","teacher":"નિસર્ગભાઈ","location":"મંદિર"},"bhaskar":{"subject":"યોગ - જીવન વિજ્ઞાન","teacher":"નિસર્ગભાઈ","location":"મંદિર"}},"7:30-8:00":{"aditya":{"subject":"વાંચન -લેખન - ગણિત","teacher":"સંજયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"ગણિત","teacher":"મેઘનાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ગણિત","teacher":"સુમિતભાઈ","location":"અભ્યાસ ગૃહ"}},"8:00-8:30":{"aditya":{"subject":"વાંચન -લેખન - ગણિત","teacher":"સંજયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"ગણિત","teacher":"મેઘનાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ગણિત","teacher":"સુમિતભાઈ","location":"અભ્યાસ ગૃહ"}},"8:30-9:00":{"aditya":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"}},"9:00-9:30":{"aditya":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"}},"9:30-10:00":{"aditya":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"}},"10:00-10:30":{"aditya":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"}},"10:30-11:00":{"aditya":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"}},"11:00-11:30":{"aditya":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"}},"11:30-12:00":{"aditya":{"subject":"રામાયણ","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"રામાયણ","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"રામાયણ","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"}},"12:00-12:30":{"aditya":{"subject":"ક્રીડા","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"ક્રીડા","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ક્રીડા","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"}}},"બુધવાર":{"7:00-7:30":{"aditya":{"subject":"ક્રીડા","teacher":"સંજયભાઈ","location":"મંદિર"},"ravi":{"subject":"ક્રીડા","teacher":"સંજયભાઈ","location":"મંદિર"},"bhaskar":{"subject":"ક્રીડા","teacher":"સંજયભાઈ","location":"મંદિર"}},"7:30-8:00":{"aditya":{"subject":"વાંચન -લેખન - ગણિત","teacher":"સંજયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"ગણિત","teacher":"મેઘનાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ગણિત","teacher":"સુમિતભાઈ","location":"અભ્યાસ ગૃહ"}},"8:00-8:30":{"aditya":{"subject":"વાંચન -લેખન - ગણિત","teacher":"સંજયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"ગણિત","teacher":"મેઘનાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ગણિત","teacher":"સુમિતભાઈ","location":"અભ્યાસ ગૃહ"}},"8:30-9:00":{"aditya":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"}},"9:00-9:30":{"aditya":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"}},"9:30-10:00":{"aditya":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"}},"10:00-10:30":{"aditya":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"}},"10:30-11:00":{"aditya":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"}},"11:00-11:30":{"aditya":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"}},"11:30-12:00":{"aditya":{"subject":"રામાયણ","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"રામાયણ","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"રામાયણ","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"}},"12:00-12:30":{"aditya":{"subject":"ક્રીડા","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"ક્રીડા","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ક્રીડા","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"}}},"ગુરુવાર":{"7:00-7:30":{"aditya":{"subject":"યોગ - જીવન વિજ્ઞાન","teacher":"નિસર્ગભાઈ","location":"મંદિર"},"ravi":{"subject":"યોગ - જીવન વિજ્ઞાન","teacher":"નિસર્ગભાઈ","location":"મંદિર"},"bhaskar":{"subject":"યોગ - જીવન વિજ્ઞાન","teacher":"નિસર્ગભાઈ","location":"મંદિર"}},"7:30-8:00":{"aditya":{"subject":"ક્રિયાકલાપ","teacher":"જિગીષાબેન","location":"મંદિર"},"ravi":{"subject":"ક્રિયાકલાપ","teacher":"જિગીષાબેન","location":"મંદિર"},"bhaskar":{"subject":"યોગ - જીવન વિજ્ઞાન","teacher":"નિસર્ગભાઈ","location":"મંદિર"}},"8:00-8:30":{"aditya":{"subject":"ક્રિયાકલાપ","teacher":"જિગીષાબેન","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"ક્રિયાકલાપ","teacher":"જિગીષાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"આયુર્વેદ","teacher":"હિતેશભાઈ","location":"અભ્યાસ ગૃહ"}},"8:30-9:00":{"aditya":{"subject":"ક્રિયાકલાપ","teacher":"જિગીષાબેન","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"ક્રિયાકલાપ","teacher":"જિગીષાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"આયુર્વેદ","teacher":"હિતેશભાઈ","location":"અભ્યાસ ગૃહ"}},"9:00-9:30":{"aditya":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"}},"9:30-10:00":{"aditya":{"subject":"વિજ્ઞાન","teacher":"નિસર્ગભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"વિજ્ઞાન","teacher":"નિસર્ગભાઈ","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ગણિત","teacher":"મનીષભાઈ","location":"અભ્યાસ ગૃહ"}},"10:00-10:30":{"aditya":{"subject":"વિજ્ઞાન","teacher":"નિસર્ગભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"વિજ્ઞાન","teacher":"નિસર્ગભાઈ","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ગણિત","teacher":"મનીષભાઈ","location":"અભ્યાસ ગૃહ"}},"10:30-11:00":{"aditya":{"subject":"પારાયણ","teacher":"સ્વાધ્યાય","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"પારાયણ","teacher":"સ્વાધ્યાય","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ગણિત","teacher":"મનીષભાઈ","location":"અભ્યાસ ગૃહ"}},"11:00-11:30":{"aditya":{"subject":"અભિવ્યક્તિ","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"અભિવ્યક્તિ","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"અભિવ્યક્તિ","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"}},"11:30-12:00":{"aditya":{"subject":"અભિવ્યક્તિ","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"અભિવ્યક્તિ","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"અભિવ્યક્તિ","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"}},"12:00-12:30":{"aditya":{"subject":"ક્રીડા","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"ક્રીડા","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ક્રીડા","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"}}},"શુક્રવાર":{"7:00-7:30":{"aditya":{"subject":"ક્રીડા","teacher":"સંજયભાઈ","location":"મંદિર"},"ravi":{"subject":"ક્રીડા","teacher":"સંજયભાઈ","location":"મંદિર"},"bhaskar":{"subject":"ક્રીડા","teacher":"સંજયભાઈ","location":"મંદિર"}},"7:30-8:00":{"aditya":{"subject":"વાંચન -લેખન - ગણિત","teacher":"સંજયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"વાંચન -લેખન - ગણિત","teacher":"સંજયભાઈ","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ગણિત","teacher":"સુમિતભાઈ","location":"અભ્યાસ ગૃહ"}},"8:00-8:30":{"aditya":{"subject":"વાંચન -લેખન - ગણિત","teacher":"સંજયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"વાંચન -લેખન - ગણિત","teacher":"સંજયભાઈ","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ગણિત","teacher":"સુમિતભાઈ","location":"અભ્યાસ ગૃહ"}},"8:30-9:00":{"aditya":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"}},"9:00-9:30":{"aditya":{"subject":"ચરિત્ર","teacher":"મેઘનાબેન","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"અંગ્રેજી","teacher":"હિતેશભાઈ પોપલીયા","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"અંગ્રેજી","teacher":"હિતેશભાઈ પોપલીયા","location":"અભ્યાસ ગૃહ"}},"9:30-10:00":{"aditya":{"subject":"ચરિત્ર","teacher":"મેઘનાબેન","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"અંગ્રેજી","teacher":"હિતેશભાઈ પોપલીયા","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"અંગ્રેજી","teacher":"હિતેશભાઈ પોપલીયા","location":"અભ્યાસ ગૃહ"}},"10:00-10:30":{"aditya":{"subject":"સ્વાધ્યાય","teacher":"સ્વાધ્યાય","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"વિજ્ઞાન","teacher":"નિસર્ગભાઈ","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"વિજ્ઞાન","teacher":"સંયુક્તાબેન","location":"અભ્યાસ ગૃહ"}},"10:30-11:00":{"aditya":{"subject":"સ્વાધ્યાય","teacher":"સ્વાધ્યાય","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"વિજ્ઞાન","teacher":"નિસર્ગભાઈ","location":"ખેતર"},"bhaskar":{"subject":"વિજ્ઞાન","teacher":"સંયુક્તાબેન","location":"અભ્યાસ ગૃહ"}},"11:00-11:30":{"aditya":{"subject":"રામાયણ","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"રામાયણ","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"રામાયણ","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"}},"11:30-12:00":{"aditya":{"subject":"રામાયણ","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"રામાયણ","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"રામાયણ","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"}},"12:00-12:30":{"aditya":{"subject":"ક્રીડા","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"ક્રીડા","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ક્રીડા","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"}}}},"dayDates":{"સોમવાર":"20/07/2026","મંગળવાર":"21/07/2026","બુધવાર":"22/07/2026","ગુરુવાર":"23/07/2026","શુક્રવાર":"24/07/2026"}};
+var DATA = {"groups":[{"key":"aditya","name":"આદિત્ય","age":"8-10"},{"key":"ravi","name":"રવિ","age":"10-12"},{"key":"bhaskar","name":"ભાસ્કર","age":"13-15"}],"days":["સોમવાર","મંગળવાર","બુધવાર","ગુરુવાર","શુક્રવાર"],"slots":["7:00-7:30","7:30-8:00","8:00-8:30","8:30-9:00","9:00-9:30","9:30-10:00","10:00-10:30","10:30-11:00","11:00-11:30","11:30-12:00","12:00-12:30"],"subjects":["અભિવ્યક્તિ","અલ્પાહાર","આયુર્વેદ","કૃષિ","ક્રિયાકલાપ","ક્રીડા","ગણિત","ચિત્ર","ચેસ","પારાયણ","યોગ - જીવન વિજ્ઞાન","રામાયણ","વાંચન -લેખન","વાંચન -લેખન - ગણિત","વિજ્ઞાન","સંગીત","સંસ્કૃત","સ્વાધ્યાય","અંગ્રેજી","ચરિત્ર"],"week":{"સોમવાર":{"7:00-7:30":{"aditya":{"subject":"ક્રીડા","teacher":"સંજયભાઈ","location":"મંદિર"},"ravi":{"subject":"ક્રીડા","teacher":"સંજયભાઈ","location":"મંદિર"},"bhaskar":{"subject":"ક્રીડા","teacher":"સંજયભાઈ","location":"મંદિર"}},"7:30-8:00":{"aditya":{"subject":"વાંચન -લેખન - ગણિત","teacher":"સંજયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"વાંચન -લેખન - ગણિત","teacher":"સંજયભાઈ","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ગણિત","teacher":"સુમિતભાઈ","location":"અભ્યાસ ગૃહ"}},"8:00-8:30":{"aditya":{"subject":"વાંચન -લેખન - ગણિત","teacher":"સંજયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"વાંચન -લેખન - ગણિત","teacher":"સંજયભાઈ","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ગણિત","teacher":"સુમિતભાઈ","location":"અભ્યાસ ગૃહ"}},"8:30-9:00":{"aditya":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"}},"9:00-9:30":{"aditya":{"subject":"સંગીત","teacher":"દિપક ગુરુજી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"સંગીત","teacher":"દિપક ગુરુજી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"સંગીત","teacher":"દિપક ગુરુજી","location":"અભ્યાસ ગૃહ"}},"9:30-10:00":{"aditya":{"subject":"સંગીત","teacher":"દિપક ગુરુજી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"સંગીત","teacher":"દિપક ગુરુજી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"સંગીત","teacher":"દિપક ગુરુજી","location":"અભ્યાસ ગૃહ"}},"10:00-10:30":{"aditya":{"subject":"વાંચન -લેખન","teacher":"હિતેશભાઈ પોપલીયા","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"વાંચન -લેખન","teacher":"હિતેશભાઈ પોપલીયા","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ગણિત","teacher":"મનીષભાઈ","location":"અભ્યાસ ગૃહ"}},"10:30-11:00":{"aditya":{"subject":"વાંચન -લેખન","teacher":"હિતેશભાઈ પોપલીયા","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"વાંચન -લેખન","teacher":"હિતેશભાઈ પોપલીયા","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ગણિત","teacher":"મનીષભાઈ","location":"અભ્યાસ ગૃહ"}},"11:00-11:30":{"aditya":{"subject":"અભિવ્યક્તિ","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"અભિવ્યક્તિ","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"અંગ્રેજી","teacher":"હિતેશભાઈ પોપલીયા","location":"અભ્યાસ ગૃહ"}},"11:30-12:00":{"aditya":{"subject":"અભિવ્યક્તિ","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"અભિવ્યક્તિ","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"અંગ્રેજી","teacher":"હિતેશભાઈ પોપલીયા","location":"અભ્યાસ ગૃહ"}},"12:00-12:30":{"aditya":{"subject":"ક્રીડા","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"ક્રીડા","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ક્રીડા","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"}}},"મંગળવાર":{"7:00-7:30":{"aditya":{"subject":"યોગ - જીવન વિજ્ઞાન","teacher":"નિસર્ગભાઈ","location":"મંદિર"},"ravi":{"subject":"યોગ - જીવન વિજ્ઞાન","teacher":"નિસર્ગભાઈ","location":"મંદિર"},"bhaskar":{"subject":"યોગ - જીવન વિજ્ઞાન","teacher":"નિસર્ગભાઈ","location":"મંદિર"}},"7:30-8:00":{"aditya":{"subject":"વાંચન -લેખન - ગણિત","teacher":"સંજયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"ગણિત","teacher":"મેઘનાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ગણિત","teacher":"સુમિતભાઈ","location":"અભ્યાસ ગૃહ"}},"8:00-8:30":{"aditya":{"subject":"વાંચન -લેખન - ગણિત","teacher":"સંજયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"ગણિત","teacher":"મેઘનાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ગણિત","teacher":"સુમિતભાઈ","location":"અભ્યાસ ગૃહ"}},"8:30-9:00":{"aditya":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"}},"9:00-9:30":{"aditya":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"}},"9:30-10:00":{"aditya":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"}},"10:00-10:30":{"aditya":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"}},"10:30-11:00":{"aditya":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"}},"11:00-11:30":{"aditya":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"}},"11:30-12:00":{"aditya":{"subject":"રામાયણ","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"રામાયણ","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"રામાયણ","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"}},"12:00-12:30":{"aditya":{"subject":"ક્રીડા","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"ક્રીડા","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ક્રીડા","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"}}},"બુધવાર":{"7:00-7:30":{"aditya":{"subject":"ક્રીડા","teacher":"સંજયભાઈ","location":"મંદિર"},"ravi":{"subject":"ક્રીડા","teacher":"સંજયભાઈ","location":"મંદિર"},"bhaskar":{"subject":"ક્રીડા","teacher":"સંજયભાઈ","location":"મંદિર"}},"7:30-8:00":{"aditya":{"subject":"વાંચન -લેખન - ગણિત","teacher":"સંજયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"ગણિત","teacher":"મેઘનાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ગણિત","teacher":"સુમિતભાઈ","location":"અભ્યાસ ગૃહ"}},"8:00-8:30":{"aditya":{"subject":"વાંચન -લેખન - ગણિત","teacher":"સંજયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"ગણિત","teacher":"મેઘનાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ગણિત","teacher":"સુમિતભાઈ","location":"અભ્યાસ ગૃહ"}},"8:30-9:00":{"aditya":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"}},"9:00-9:30":{"aditya":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"}},"9:30-10:00":{"aditya":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"}},"10:00-10:30":{"aditya":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"}},"10:30-11:00":{"aditya":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"}},"11:00-11:30":{"aditya":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"સંસ્કૃત","teacher":"ચંદ્રહાસ ગુરુજી","location":"અભ્યાસ ગૃહ"}},"11:30-12:00":{"aditya":{"subject":"રામાયણ","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"રામાયણ","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"રામાયણ","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"}},"12:00-12:30":{"aditya":{"subject":"ક્રીડા","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"ક્રીડા","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ક્રીડા","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"}}},"ગુરુવાર":{"7:00-7:30":{"aditya":{"subject":"યોગ - જીવન વિજ્ઞાન","teacher":"નિસર્ગભાઈ","location":"મંદિર"},"ravi":{"subject":"યોગ - જીવન વિજ્ઞાન","teacher":"નિસર્ગભાઈ","location":"મંદિર"},"bhaskar":{"subject":"યોગ - જીવન વિજ્ઞાન","teacher":"નિસર્ગભાઈ","location":"મંદિર"}},"7:30-8:00":{"aditya":{"subject":"ક્રિયાકલાપ","teacher":"જિગીષાબેન","location":"મંદિર"},"ravi":{"subject":"ક્રિયાકલાપ","teacher":"જિગીષાબેન","location":"મંદિર"},"bhaskar":{"subject":"યોગ - જીવન વિજ્ઞાન","teacher":"નિસર્ગભાઈ","location":"મંદિર"}},"8:00-8:30":{"aditya":{"subject":"ક્રિયાકલાપ","teacher":"જિગીષાબેન","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"ક્રિયાકલાપ","teacher":"જિગીષાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"આયુર્વેદ","teacher":"હિતેશભાઈ","location":"અભ્યાસ ગૃહ"}},"8:30-9:00":{"aditya":{"subject":"ક્રિયાકલાપ","teacher":"જિગીષાબેન","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"ક્રિયાકલાપ","teacher":"જિગીષાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"આયુર્વેદ","teacher":"હિતેશભાઈ","location":"અભ્યાસ ગૃહ"}},"9:00-9:30":{"aditya":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"}},"9:30-10:00":{"aditya":{"subject":"વિજ્ઞાન","teacher":"નિસર્ગભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"વિજ્ઞાન","teacher":"નિસર્ગભાઈ","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ગણિત","teacher":"મનીષભાઈ","location":"અભ્યાસ ગૃહ"}},"10:00-10:30":{"aditya":{"subject":"વિજ્ઞાન","teacher":"નિસર્ગભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"વિજ્ઞાન","teacher":"નિસર્ગભાઈ","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ગણિત","teacher":"મનીષભાઈ","location":"અભ્યાસ ગૃહ"}},"10:30-11:00":{"aditya":{"subject":"પારાયણ","teacher":"સ્વાધ્યાય","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"પારાયણ","teacher":"સ્વાધ્યાય","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ગણિત","teacher":"મનીષભાઈ","location":"અભ્યાસ ગૃહ"}},"11:00-11:30":{"aditya":{"subject":"અભિવ્યક્તિ","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"અભિવ્યક્તિ","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"અભિવ્યક્તિ","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"}},"11:30-12:00":{"aditya":{"subject":"અભિવ્યક્તિ","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"અભિવ્યક્તિ","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"અભિવ્યક્તિ","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"}},"12:00-12:30":{"aditya":{"subject":"ક્રીડા","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"ક્રીડા","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ક્રીડા","teacher":"ચિન્મયભાઈ","location":"અભ્યાસ ગૃહ"}}},"શુક્રવાર":{"7:00-7:30":{"aditya":{"subject":"ક્રીડા","teacher":"સંજયભાઈ","location":"મંદિર"},"ravi":{"subject":"ક્રીડા","teacher":"સંજયભાઈ","location":"મંદિર"},"bhaskar":{"subject":"ક્રીડા","teacher":"સંજયભાઈ","location":"મંદિર"}},"7:30-8:00":{"aditya":{"subject":"વાંચન -લેખન - ગણિત","teacher":"સંજયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"વાંચન -લેખન - ગણિત","teacher":"સંજયભાઈ","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ગણિત","teacher":"સુમિતભાઈ","location":"અભ્યાસ ગૃહ"}},"8:00-8:30":{"aditya":{"subject":"વાંચન -લેખન - ગણિત","teacher":"સંજયભાઈ","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"વાંચન -લેખન - ગણિત","teacher":"સંજયભાઈ","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ગણિત","teacher":"સુમિતભાઈ","location":"અભ્યાસ ગૃહ"}},"8:30-9:00":{"aditya":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"અલ્પાહાર","teacher":"અન્નપૂર્ણાદેવી","location":"અભ્યાસ ગૃહ"}},"9:00-9:30":{"aditya":{"subject":"ચરિત્ર","teacher":"મેઘનાબેન","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"અંગ્રેજી","teacher":"હિતેશભાઈ પોપલીયા","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"અંગ્રેજી","teacher":"હિતેશભાઈ પોપલીયા","location":"અભ્યાસ ગૃહ"}},"9:30-10:00":{"aditya":{"subject":"ચરિત્ર","teacher":"મેઘનાબેન","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"અંગ્રેજી","teacher":"હિતેશભાઈ પોપલીયા","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"અંગ્રેજી","teacher":"હિતેશભાઈ પોપલીયા","location":"અભ્યાસ ગૃહ"}},"10:00-10:30":{"aditya":{"subject":"સ્વાધ્યાય","teacher":"સ્વાધ્યાય","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"વિજ્ઞાન","teacher":"નિસર્ગભાઈ","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"વિજ્ઞાન","teacher":"સંયુક્તાબેન","location":"અભ્યાસ ગૃહ"}},"10:30-11:00":{"aditya":{"subject":"સ્વાધ્યાય","teacher":"સ્વાધ્યાય","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"વિજ્ઞાન","teacher":"નિસર્ગભાઈ","location":"ખેતર"},"bhaskar":{"subject":"વિજ્ઞાન","teacher":"સંયુક્તાબેન","location":"અભ્યાસ ગૃહ"}},"11:00-11:30":{"aditya":{"subject":"રામાયણ","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"રામાયણ","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"રામાયણ","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"}},"11:30-12:00":{"aditya":{"subject":"રામાયણ","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"રામાયણ","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"રામાયણ","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"}},"12:00-12:30":{"aditya":{"subject":"ક્રીડા","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"ravi":{"subject":"ક્રીડા","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"},"bhaskar":{"subject":"ક્રીડા","teacher":"સપનાબેન","location":"અભ્યાસ ગૃહ"}}}},"dayStatus":{"સોમવાર":{"type":"none","label":""},"મંગળવાર":{"type":"none","label":""},"બુધવાર":{"type":"none","label":""},"ગુરુવાર":{"type":"none","label":""},"શુક્રવાર":{"type":"none","label":""}},"dayDates":{"સોમવાર":"20/07/2026","મંગળવાર":"21/07/2026","બુધવાર":"22/07/2026","ગુરુવાર":"23/07/2026","શુક્રવાર":"24/07/2026"}};
 
 var state = { view: 'full', group: '', teacher: '', day: 'all' };
 
@@ -116,24 +118,55 @@ function hslToHex(h, s, l){
   };
   return '#' + f(0) + f(8) + f(4);
 }
-/* Same curated palette as the editor apps (V2/V3): consecutive entries jump
-   across hue families and vary in depth so subjects adjacent in the sorted
-   list stay clearly distinguishable. Keep in sync with the editors. */
+/* Same curated palette as the editor apps (V2/V3). Colors are keyed by
+   (subject + teacher) so the same subject with different teachers differs.
+   Keep in sync with the editors. */
 var SUBJECT_PALETTE = [
   [25,90,82],[205,75,80],[95,60,80],[320,70,84],[55,85,78],[255,65,84],
   [0,80,84],[170,60,76],[35,60,70],[285,55,82],[140,55,72],[225,60,74],
   [10,65,74],[75,55,70],[300,45,74],[190,70,68],[45,90,66],[340,60,74],
   [120,40,84],[265,45,70],[155,70,86],[215,45,88],[355,45,88],[85,70,88]
 ];
-function colorForSubject(subject){
+function pairKey(subject, teacher){ return (subject || '') + '\u0001' + (teacher || ''); }
+function pairLabel(subject, teacher){
+  if (!subject) return '';
+  return teacher ? (subject + ' · ' + teacher) : subject;
+}
+function weekPairList(week){
+  var used = {};
+  var w = week || DATA.week;
+  (DATA.days || []).forEach(function(d){
+    (DATA.slots || []).forEach(function(s){
+      (DATA.groups || []).forEach(function(g){
+        var c = ((w[d] || {})[s] || {})[g.key];
+        if (c && c.subject) used[pairKey(c.subject, c.teacher)] = { subject: c.subject, teacher: c.teacher || '' };
+      });
+    });
+  });
+  return Object.keys(used).sort(function(a, b){ return a.localeCompare(b, 'gu'); }).map(function(k){ return used[k]; });
+}
+function colorForPair(subject, teacher){
   if (!subject) return 'transparent';
-  var list = (DATA.subjects || []).slice().sort(function(a, b){ return a.localeCompare(b, 'gu'); });
-  var idx = list.indexOf(subject);
-  if (idx === -1) idx = 0;
+  var key = pairKey(subject, teacher);
+  var pairs = weekPairList(DATA.week);
+  var idx = -1;
+  for (var i = 0; i < pairs.length; i++){
+    if (pairKey(pairs[i].subject, pairs[i].teacher) === key){ idx = i; break; }
+  }
+  if (idx === -1){
+    pairs = pairs.concat([{ subject: subject, teacher: teacher || '' }]);
+    pairs.sort(function(a, b){
+      return pairKey(a.subject, a.teacher).localeCompare(pairKey(b.subject, b.teacher), 'gu');
+    });
+    for (var j = 0; j < pairs.length; j++){
+      if (pairKey(pairs[j].subject, pairs[j].teacher) === key){ idx = j; break; }
+    }
+  }
   var p = SUBJECT_PALETTE[idx % SUBJECT_PALETTE.length];
   var l = Math.max(60, p[2] - 8 * Math.floor(idx / SUBJECT_PALETTE.length));
   return hslToHex(p[0], p[1], l);
 }
+function colorForSubject(subject){ return colorForPair(subject, ''); }
 function groupByKey(key){
   for (var i = 0; i < DATA.groups.length; i++)
     if (DATA.groups[i].key === key) return DATA.groups[i];
@@ -166,15 +199,35 @@ function dayTitle(day){
   var d = dayDate(day);
   return esc(day) + (d ? ' • ' + esc(d) : '');
 }
+function dayStatusOf(day){
+  return (DATA.dayStatus && DATA.dayStatus[day]) || { type: 'none' };
+}
+function isDayOff(day){
+  var t = dayStatusOf(day).type;
+  return t === 'picnic' || t === 'holiday';
+}
+function dayOffTable(day, cols){
+  var st = dayStatusOf(day);
+  var label = st.label || (st.type === 'holiday' ? 'રજા' : 'આખો દિવસ પિકનિક');
+  var emoji = st.type === 'holiday' ? '🌴' : '🧺';
+  return '<table class="sched">' +
+    '<thead><tr><th class="daytitle" colspan="' + cols + '">' + dayTitle(day) + '</th></tr></thead>' +
+    '<tbody><tr><td class="offbanner' + (st.type === 'holiday' ? ' hol' : '') + '" colspan="' + cols + '">' +
+    emoji + ' ' + esc(label) + '</td></tr></tbody></table>';
+}
 
 /* ---------- table builders (one table per day, wrapped for PDF paging) ---------- */
 function wrapDayTable(inner){
   return '<div class="pdf-block tablewrap">' + inner + '</div>';
 }
-function cellHtml(cell, usedSubjects){
+function trackPair(usedPairs, subject, teacher){
+  if (!subject) return;
+  usedPairs[pairKey(subject, teacher)] = { subject: subject, teacher: teacher || '' };
+}
+function cellHtml(cell, usedPairs){
   if (!cell || !cell.subject) return '<td></td>';
-  usedSubjects[cell.subject] = true;
-  var bg = colorForSubject(cell.subject);
+  trackPair(usedPairs, cell.subject, cell.teacher);
+  var bg = colorForPair(cell.subject, cell.teacher);
   var h = '<td style="background-color:' + bg + ';">';
   h += '<div class="subj">' + esc(cell.subject) + '</div>';
   if (cell.teacher) h += '<div class="meta">શિક્ષક: ' + esc(cell.teacher) + '</div>';
@@ -182,9 +235,13 @@ function cellHtml(cell, usedSubjects){
   h += '</td>';
   return h;
 }
-function buildFullView(usedSubjects){
+function buildFullView(usedPairs){
   var html = '';
   activeDays().forEach(function(day){
+    if (isDayOff(day)){
+      html += wrapDayTable(dayOffTable(day, DATA.groups.length + 1));
+      return;
+    }
     var dayData = DATA.week[day];
     if (!dayData) return;
     var t = '<table class="sched">';
@@ -198,7 +255,7 @@ function buildFullView(usedSubjects){
       var any = DATA.groups.some(function(g){ var c = slotData[g.key]; return c && c.subject; });
       if (!any) return;
       t += '<tr><td class="time">' + esc(slot) + '</td>';
-      DATA.groups.forEach(function(g){ t += cellHtml(slotData[g.key], usedSubjects); });
+      DATA.groups.forEach(function(g){ t += cellHtml(slotData[g.key], usedPairs); });
       t += '</tr>';
     });
     t += '</tbody></table>';
@@ -206,18 +263,22 @@ function buildFullView(usedSubjects){
   });
   return html;
 }
-function buildGroupView(usedSubjects){
+function buildGroupView(usedPairs){
   var g = groupByKey(state.group);
   if (!g) return '';
   var html = '';
   activeDays().forEach(function(day){
+    if (isDayOff(day)){
+      html += wrapDayTable(dayOffTable(day, 4));
+      return;
+    }
     var dayData = DATA.week[day] || {};
     var rows = '';
     DATA.slots.forEach(function(slot){
       var cell = (dayData[slot] || {})[g.key];
       if (!cell || !cell.subject) return;
-      usedSubjects[cell.subject] = true;
-      var bg = colorForSubject(cell.subject);
+      trackPair(usedPairs, cell.subject, cell.teacher);
+      var bg = colorForPair(cell.subject, cell.teacher);
       rows += '<tr><td class="time">' + esc(slot) + '</td>';
       rows += '<td style="background-color:' + bg + ';"><span class="subj">' + esc(cell.subject) + '</span></td>';
       rows += '<td>' + esc(cell.teacher || '—') + '</td>';
@@ -235,11 +296,15 @@ function buildGroupView(usedSubjects){
   });
   return html;
 }
-function buildTeacherView(usedSubjects){
+function buildTeacherView(usedPairs){
   var teacher = state.teacher;
   if (!teacher) return '';
   var html = '';
   activeDays().forEach(function(day){
+    if (isDayOff(day)){
+      html += wrapDayTable(dayOffTable(day, 4));
+      return;
+    }
     var dayData = DATA.week[day] || {};
     var rows = '';
     DATA.slots.forEach(function(slot){
@@ -247,8 +312,8 @@ function buildTeacherView(usedSubjects){
       DATA.groups.forEach(function(g){
         var cell = slotData[g.key];
         if (!cell || !cell.subject || cell.teacher !== teacher) return;
-        usedSubjects[cell.subject] = true;
-        var bg = colorForSubject(cell.subject);
+        trackPair(usedPairs, cell.subject, cell.teacher);
+        var bg = colorForPair(cell.subject, cell.teacher);
         rows += '<tr><td class="time">' + esc(slot) + '</td>';
         rows += '<td>' + esc(g.name) + ' (' + esc(g.age) + ')</td>';
         rows += '<td style="background-color:' + bg + ';"><span class="subj">' + esc(cell.subject) + '</span></td>';
@@ -267,12 +332,13 @@ function buildTeacherView(usedSubjects){
   });
   return html;
 }
-function buildLegend(usedSubjects){
-  var keys = Object.keys(usedSubjects).sort(function(a, b){ return a.localeCompare(b, 'gu'); });
+function buildLegend(usedPairs){
+  var keys = Object.keys(usedPairs).sort(function(a, b){ return a.localeCompare(b, 'gu'); });
   if (!keys.length) return '';
   var h = '<div class="legend pdf-block">';
-  keys.forEach(function(s){
-    h += '<div class="lg-item"><span class="lg-swatch" style="background-color:' + colorForSubject(s) + '"></span>' + esc(s) + '</div>';
+  keys.forEach(function(k){
+    var p = usedPairs[k];
+    h += '<div class="lg-item"><span class="lg-swatch" style="background-color:' + colorForPair(p.subject, p.teacher) + '"></span>' + esc(pairLabel(p.subject, p.teacher)) + '</div>';
   });
   h += '</div>';
   return h;
@@ -311,14 +377,14 @@ function render(){
   document.getElementById('teacherCtrl').style.display = state.view === 'teacher' ? '' : 'none';
   document.getElementById('selInfo').textContent = selectionLabel();
 
-  var usedSubjects = {};
+  var usedPairs = {};
   var html = '';
-  if (state.view === 'group') html = buildGroupView(usedSubjects);
-  else if (state.view === 'teacher') html = buildTeacherView(usedSubjects);
-  else html = buildFullView(usedSubjects);
+  if (state.view === 'group') html = buildGroupView(usedPairs);
+  else if (state.view === 'teacher') html = buildTeacherView(usedPairs);
+  else html = buildFullView(usedPairs);
 
   if (!html) html = '<p style="text-align:center;color:var(--mu)">કોઈ માહિતી નથી</p>';
-  html += buildLegend(usedSubjects);
+  html += buildLegend(usedPairs);
   document.getElementById('printArea').innerHTML = html;
 }
 
@@ -403,7 +469,8 @@ async function downloadPDF(){
   DATA.days.forEach(function(d){
     var o = document.createElement('option');
     var dt = dayDate(d);
-    o.value = d; o.textContent = d + (dt ? ' (' + dt.slice(0, 5) + ')' : '');
+    var off = isDayOff(d) ? (dayStatusOf(d).type === 'holiday' ? '🌴 ' : '🧺 ') : '';
+    o.value = d; o.textContent = off + d + (dt ? ' (' + dt.slice(0, 5) + ')' : '');
     daySel.appendChild(o);
   });
 
