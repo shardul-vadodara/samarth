@@ -152,8 +152,8 @@ var DATA = {
           "location": "અભ્યાસ ગૃહ"
         },
         "bhaskar": {
-          "subject": "ગણિત",
-          "teacher": "મનીષભાઈ",
+          "subject": "વિજ્ઞાન",
+          "teacher": "પ્રતિકભાઈ",
           "location": "અભ્યાસ ગૃહ"
         }
       },
@@ -169,8 +169,8 @@ var DATA = {
           "location": "અભ્યાસ ગૃહ"
         },
         "bhaskar": {
-          "subject": "ગણિત",
-          "teacher": "મનીષભાઈ",
+          "subject": "વિજ્ઞાન",
+          "teacher": "પ્રતિકભાઈ",
           "location": "અભ્યાસ ગૃહ"
         }
       },
@@ -446,7 +446,7 @@ var DATA = {
         },
         "bhaskar": {
           "subject": "ગણિત",
-          "teacher": "સુમિતભાઈ",
+          "teacher": "મનીષભાઈ",
           "location": "અભ્યાસ ગૃહ"
         }
       },
@@ -463,7 +463,7 @@ var DATA = {
         },
         "bhaskar": {
           "subject": "ગણિત",
-          "teacher": "સુમિતભાઈ",
+          "teacher": "મનીષભાઈ",
           "location": "અભ્યાસ ગૃહ"
         }
       },
