@@ -109,34 +109,34 @@ var DATA = {
       "9:00-9:30": {
         "aditya": {
           "subject": "સંગીત",
-          "teacher": "દિપક ગુરુજી",
+          "teacher": "કીર્તનભાઈ",
           "location": "અભ્યાસ ગૃહ"
         },
         "ravi": {
           "subject": "સંગીત",
-          "teacher": "દિપક ગુરુજી",
+          "teacher": "કીર્તનભાઈ",
           "location": "અભ્યાસ ગૃહ"
         },
         "bhaskar": {
           "subject": "સંગીત",
-          "teacher": "દિપક ગુરુજી",
+          "teacher": "કીર્તનભાઈ",
           "location": "અભ્યાસ ગૃહ"
         }
       },
       "9:30-10:00": {
         "aditya": {
           "subject": "સંગીત",
-          "teacher": "દિપક ગુરુજી",
+          "teacher": "કીર્તનભાઈ",
           "location": "અભ્યાસ ગૃહ"
         },
         "ravi": {
           "subject": "સંગીત",
-          "teacher": "દિપક ગુરુજી",
+          "teacher": "કીર્તનભાઈ",
           "location": "અભ્યાસ ગૃહ"
         },
         "bhaskar": {
           "subject": "સંગીત",
-          "teacher": "દિપક ગુરુજી",
+          "teacher": "કીર્તનભાઈ",
           "location": "અભ્યાસ ગૃહ"
         }
       },
@@ -153,7 +153,7 @@ var DATA = {
         },
         "bhaskar": {
           "subject": "ગણિત",
-          "teacher": "મનીષભાઈ",
+          "teacher": "સ્વાધ્યાય",
           "location": "અભ્યાસ ગૃહ"
         }
       },
@@ -170,7 +170,7 @@ var DATA = {
         },
         "bhaskar": {
           "subject": "ગણિત",
-          "teacher": "મનીષભાઈ",
+          "teacher": "સ્વાધ્યાય",
           "location": "અભ્યાસ ગૃહ"
         }
       },
@@ -1001,7 +1001,8 @@ var DATA = {
     "સ્વાધ્યાય",
     "હિતેશભાઈ",
     "હિતેશભાઈ પોપલીયા",
-    "પ્રતિકભાઈ"
+    "પ્રતિકભાઈ",
+    "કીર્તનભાઈ"
   ],
   "subjects": [
     "અભિવ્યક્તિ",
