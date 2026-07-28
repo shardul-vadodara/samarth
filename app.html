@@ -258,6 +258,7 @@ table.wtab td.selcell{outline:3px solid var(--brand);outline-offset:-3px;backgro
     <div class="chiprow days" id="editDayRow"></div>
     <div class="card picnicbar" id="picnicBar"></div>
     <div id="editList"></div>
+    <button class="btn ghost" onclick="addSlotStart()">+ શરૂઆતમાં સ્લોટ ઉમેરો</button>
     <button class="btn ghost" onclick="addSlot()">+ નવો સમય-સ્લોટ (૩૦ મિનિટ)</button>
   </section>
 
@@ -377,6 +378,9 @@ function normalizeData(){
 normalizeData();
 var ORIGINAL_DATA = JSON.parse(JSON.stringify(DATA));
 var savedJSON = JSON.stringify(DATA);
+/* Guards the one-time auto-archive below; reset whenever DATA is replaced wholesale
+   (data.js open, JSON import) so the next edit snapshots that newly-loaded week. */
+var _autoArchivedThisLoad = false;
 
 var DAY_OFF_LABELS = { picnic:'આખો દિવસ પિકનિક', holiday:'રજા' };
 function dayStatus(day){ return (DATA.dayStatus && DATA.dayStatus[day]) || {type:'none', label:''}; }
@@ -509,7 +513,7 @@ function mergeTeacher(cell, t){
 }
 
 function isDirty(){ return JSON.stringify(DATA) !== savedJSON; }
-function markDirty(){ updateSaveUI(); }
+function markDirty(){ autoArchiveBeforeEdit(); updateSaveUI(); }
 function updateSaveUI(){ document.getElementById('dirtyDot').style.display = isDirty() ? 'inline-block' : 'none'; }
 
 var _toastT = null;
@@ -1105,6 +1109,25 @@ function addSlot(){
   });
   markDirty(); renderEdit(); toast('નવો સ્લોટ ઉમેરાયો: ' + label);
 }
+function prevSlotLabel(){
+  const first = DATA.slots[0];
+  const startPart = first.split('-')[0].trim();
+  const t = timeToParts(startPart);
+  let ph = t.h, pm = t.m - 30;
+  if(pm < 0){ pm += 60; ph -= 1; }
+  if(ph < 0) ph += 24;
+  return fmtTime(ph, pm) + '-' + startPart;
+}
+function addSlotStart(){
+  const label = prevSlotLabel();
+  if(DATA.slots.includes(label)){ toast('આ સ્લોટ પહેલેથી છે'); return; }
+  DATA.slots.unshift(label);
+  DATA.days.forEach(day=>{
+    DATA.week1[day][label] = {};
+    DATA.groups.forEach(g=>{ DATA.week1[day][label][g.key] = {subject:'', teacher:'', location:''}; });
+  });
+  markDirty(); renderEdit(); toast('નવો સ્લોટ ઉમેરાયો: ' + label);
+}
 function removeSlot(slot){
   if(!confirm('"'+slot+'" સ્લોટ બધા દિવસોમાંથી કાઢી નાખવામાં આવશે. ચાલુ રાખવું?')) return;
   DATA.slots = DATA.slots.filter(s=>s!==slot);
@@ -1171,6 +1194,31 @@ function snapshotCurrentWeek(label, weekStart){
     dayStatus: JSON.parse(JSON.stringify(DATA.dayStatus || {}))
   };
 }
+function weekHasContent(week){
+  if(!week) return false;
+  return DATA.days.some(d=>{
+    const day = week[d]; if(!day) return false;
+    return Object.keys(day).some(slot=>{
+      const cells = day[slot]; if(!cells) return false;
+      return Object.values(cells).some(c=>c && (c.subject || c.teacher || c.location));
+    });
+  });
+}
+/* Archives DATA.week1 into history if it has content and isn't already saved there.
+   Used both for the one-time auto-archive-on-first-edit and as a safety net right
+   before restoreWeekHistory() overwrites the current week. */
+function autoArchiveIfChanged(label){
+  ensureWeekHistory();
+  if(!weekHasContent(DATA.week1)) return false;
+  if(DATA.weekHistory.some(h=>JSON.stringify(h.week) === JSON.stringify(DATA.week1))) return false;
+  DATA.weekHistory.unshift(snapshotCurrentWeek(label, ''));
+  return true;
+}
+function autoArchiveBeforeEdit(){
+  if(_autoArchivedThisLoad) return;
+  _autoArchivedThisLoad = true;
+  autoArchiveIfChanged('આપમેળે સાચવેલું — ' + fmtSavedAt(new Date().toISOString()));
+}
 function archiveCurrentWeek(){
   ensureWeekHistory();
   const startEl = document.getElementById('histWeekStart');
@@ -1212,14 +1260,16 @@ function restoreWeekHistory(id){
   ensureWeekHistory();
   const h = DATA.weekHistory.find(x=>x.id===id);
   if(!h || !h.week) return;
-  if(!confirm('વર્તમાન સમયપત્રક બદલાઈને "' + (h.label||id) + '" લોડ થશે.\n\nજો વર્તમાન અઠવાડિયું હજી સાચવ્યું નથી તો પહેલા સાચવો.\nચાલુ રાખવું?')) return;
+  if(!confirm('વર્તમાન સમયપત્રક બદલાઈને "' + (h.label||id) + '" લોડ થશે.\n\nવર્તમાન ફેરફારો આપમેળે ઇતિહાસમાં સચવાઈ જશે.\nચાલુ રાખવું?')) return;
+  const archived = autoArchiveIfChanged('પુનઃસ્થાપન પહેલાં આપમેળે સાચવેલું — ' + fmtSavedAt(new Date().toISOString()));
   DATA.week1 = JSON.parse(JSON.stringify(h.week));
   if(h.dayStatus) DATA.dayStatus = JSON.parse(JSON.stringify(h.dayStatus));
   if(Array.isArray(h.slots) && h.slots.length) DATA.slots = JSON.parse(JSON.stringify(h.slots));
+  _autoArchivedThisLoad = true;
   normalizeData();
   markDirty();
   afterDataLoad(false);
-  toast('સાચવેલું અઠવાડિયું લોડ થયું ✓');
+  toast(archived ? 'વર્તમાન ફેરફારો ઇતિહાસમાં સાચવ્યા અને સાચવેલું અઠવાડિયું લોડ થયું ✓' : 'સાચવેલું અઠવાડિયું લોડ થયું ✓');
 }
 function downloadJsonBlob(obj, filename){
   const blob = new Blob([JSON.stringify(obj, null, 2)], {type:'application/json'});
@@ -1434,6 +1484,7 @@ async function openDataJs(){
       });
       const file = await handle.getFile();
       DATA = parseDataJsText(await file.text());
+      _autoArchivedThisLoad = false;
       _dataJsFileHandle = handle;
       await idbSetHandle(handle);
       afterDataLoad(true);
@@ -1452,6 +1503,7 @@ function handleOpenDataJsFile(file){
   reader.onload = function(e){
     try{
       DATA = parseDataJsText(e.target.result);
+      _autoArchivedThisLoad = false;
       afterDataLoad(true);
       toast('data.js લોડ થયું ✓');
     }catch(err){ toast('ફાઇલ વાંચવામાં ભૂલ: ' + err.message); }
@@ -1476,6 +1528,7 @@ function handleImportFile(file){
       const picnicData = obj._picnic; // old backups: picnic lived outside DATA
       delete obj._picnic;
       DATA = obj;
+      _autoArchivedThisLoad = false;
       if(picnicData && !DATA.dayStatus){
         DATA.dayStatus = {};
         Object.keys(picnicData).forEach(d=>{
