@@ -420,51 +420,51 @@ var DATA = {
         "aditya": {
           "subject": "ઉત્સવ",
           "teacher": "ઉત્સવ",
-          "location": "અભ્યાસ ગૃહ"
+          "location": "વાકળ સેવા કેન્દ્ર"
         },
         "ravi": {
           "subject": "ઉત્સવ",
           "teacher": "ઉત્સવ",
-          "location": "અભ્યાસ ગૃહ"
+          "location": "વાકળ સેવા કેન્દ્ર"
         },
         "bhaskar": {
           "subject": "ઉત્સવ",
           "teacher": "ઉત્સવ",
-          "location": "અભ્યાસ ગૃહ"
+          "location": "વાકળ સેવા કેન્દ્ર"
         }
       },
       "8:30-9:00": {
         "aditya": {
           "subject": "ઉત્સવ",
           "teacher": "ઉત્સવ",
-          "location": "અભ્યાસ ગૃહ"
+          "location": "વાકળ સેવા કેન્દ્ર"
         },
         "ravi": {
           "subject": "ઉત્સવ",
           "teacher": "ઉત્સવ",
-          "location": "અભ્યાસ ગૃહ"
+          "location": "વાકળ સેવા કેન્દ્ર"
         },
         "bhaskar": {
           "subject": "ઉત્સવ",
           "teacher": "ઉત્સવ",
-          "location": "અભ્યાસ ગૃહ"
+          "location": "વાકળ સેવા કેન્દ્ર"
         }
       },
       "9:00-9:30": {
         "aditya": {
           "subject": "ઉત્સવ",
           "teacher": "ઉત્સવ",
-          "location": "અભ્યાસ ગૃહ"
+          "location": "વાકળ સેવા કેન્દ્ર"
         },
         "ravi": {
           "subject": "ઉત્સવ",
           "teacher": "ઉત્સવ",
-          "location": "અભ્યાસ ગૃહ"
+          "location": "વાકળ સેવા કેન્દ્ર"
         },
         "bhaskar": {
           "subject": "ઉત્સવ",
           "teacher": "ઉત્સવ",
-          "location": "અભ્યાસ ગૃહ"
+          "location": "વાકળ સેવા કેન્દ્ર"
         }
       },
       "9:30-10:00": {
@@ -1031,7 +1031,8 @@ var DATA = {
   "locations": [
     "અભ્યાસ ગૃહ",
     "ખેતર",
-    "મંદિર"
+    "મંદિર",
+    "વાકળ સેવા કેન્દ્ર"
   ],
   "weekHistory": [
     {
