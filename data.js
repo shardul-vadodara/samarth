@@ -736,8 +736,8 @@ var DATA = {
           "location": ""
         },
         "bhaskar": {
-          "subject": "ગણિત",
-          "teacher": "મનીષભાઈ",
+          "subject": "સ્વાધ્યાય",
+          "teacher": "સ્વાધ્યાય",
           "location": ""
         }
       },
@@ -753,8 +753,8 @@ var DATA = {
           "location": ""
         },
         "bhaskar": {
-          "subject": "ગણિત",
-          "teacher": "મનીષભાઈ",
+          "subject": "અભિવ્યક્તિ",
+          "teacher": "ચિન્મયભાઈ",
           "location": ""
         }
       },
@@ -908,8 +908,8 @@ var DATA = {
           "location": ""
         },
         "bhaskar": {
-          "subject": "વિજ્ઞાન",
-          "teacher": "પ્રતિકભાઈ",
+          "subject": "ગણિત",
+          "teacher": "મનીષભાઈ",
           "location": ""
         }
       },
@@ -925,8 +925,8 @@ var DATA = {
           "location": ""
         },
         "bhaskar": {
-          "subject": "વિજ્ઞાન",
-          "teacher": "પ્રતિકભાઈ",
+          "subject": "ગણિત",
+          "teacher": "મનીષભાઈ",
           "location": ""
         }
       },
