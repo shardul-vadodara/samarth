@@ -75,34 +75,34 @@ var DATA = {
       "9:00-9:30": {
         "aditya": {
           "subject": "સંગીત",
-          "teacher": "કીર્તનભાઈ",
+          "teacher": "દિપક ગુરુજી",
           "location": "અભ્યાસ ગૃહ"
         },
         "ravi": {
           "subject": "સંગીત",
-          "teacher": "કીર્તનભાઈ",
+          "teacher": "દિપક ગુરુજી",
           "location": "અભ્યાસ ગૃહ"
         },
         "bhaskar": {
           "subject": "સંગીત",
-          "teacher": "કીર્તનભાઈ",
+          "teacher": "દિપક ગુરુજી",
           "location": "અભ્યાસ ગૃહ"
         }
       },
       "9:30-10:00": {
         "aditya": {
           "subject": "સંગીત",
-          "teacher": "કીર્તનભાઈ",
+          "teacher": "દિપક ગુરુજી",
           "location": "અભ્યાસ ગૃહ"
         },
         "ravi": {
           "subject": "સંગીત",
-          "teacher": "કીર્તનભાઈ",
+          "teacher": "દિપક ગુરુજી",
           "location": "અભ્યાસ ગૃહ"
         },
         "bhaskar": {
           "subject": "સંગીત",
-          "teacher": "કીર્તનભાઈ",
+          "teacher": "દિપક ગુરુજી",
           "location": "અભ્યાસ ગૃહ"
         }
       },
@@ -153,7 +153,7 @@ var DATA = {
         },
         "bhaskar": {
           "subject": "ગણિત",
-          "teacher": "સ્વાધ્યાય",
+          "teacher": "મનીષભાઈ",
           "location": ""
         }
       },
@@ -170,7 +170,7 @@ var DATA = {
         },
         "bhaskar": {
           "subject": "ગણિત",
-          "teacher": "સ્વાધ્યાય",
+          "teacher": "મનીષભાઈ",
           "location": ""
         }
       },
@@ -235,7 +235,7 @@ var DATA = {
         },
         "ravi": {
           "subject": "વાંચન -લેખન - ગણિત",
-          "teacher": "સંજયભાઈ",
+          "teacher": "સ્વાધ્યાય",
           "location": "અભ્યાસ ગૃહ"
         },
         "bhaskar": {
@@ -263,35 +263,35 @@ var DATA = {
       },
       "9:00-9:30": {
         "aditya": {
-          "subject": "સંગીત",
-          "teacher": "દિપક ગુરુજી",
+          "subject": "સંસ્કૃત",
+          "teacher": "ચંદ્રહાસ ગુરુજી",
           "location": "અભ્યાસ ગૃહ"
         },
         "ravi": {
-          "subject": "સંગીત",
-          "teacher": "દિપક ગુરુજી",
+          "subject": "સંસ્કૃત",
+          "teacher": "ચંદ્રહાસ ગુરુજી",
           "location": "અભ્યાસ ગૃહ"
         },
         "bhaskar": {
-          "subject": "સંગીત",
-          "teacher": "દિપક ગુરુજી",
+          "subject": "સંસ્કૃત",
+          "teacher": "ચંદ્રહાસ ગુરુજી",
           "location": "અભ્યાસ ગૃહ"
         }
       },
       "9:30-10:00": {
         "aditya": {
-          "subject": "સંગીત",
-          "teacher": "દિપક ગુરુજી",
+          "subject": "સંસ્કૃત",
+          "teacher": "ચંદ્રહાસ ગુરુજી",
           "location": "અભ્યાસ ગૃહ"
         },
         "ravi": {
-          "subject": "સંગીત",
-          "teacher": "દિપક ગુરુજી",
+          "subject": "સંસ્કૃત",
+          "teacher": "ચંદ્રહાસ ગુરુજી",
           "location": "અભ્યાસ ગૃહ"
         },
         "bhaskar": {
-          "subject": "સંગીત",
-          "teacher": "દિપક ગુરુજી",
+          "subject": "સંસ્કૃત",
+          "teacher": "ચંદ્રહાસ ગુરુજી",
           "location": "અભ્યાસ ગૃહ"
         }
       },
@@ -302,8 +302,8 @@ var DATA = {
           "location": "અભ્યાસ ગૃહ"
         },
         "ravi": {
-          "subject": "વાંચન -લેખન - ગણિત",
-          "teacher": "સંજયભાઈ",
+          "subject": "યોગ - જીવન વિજ્ઞાન",
+          "teacher": "નિસર્ગભાઈ",
           "location": "અભ્યાસ ગૃહ"
         },
         "bhaskar": {
@@ -382,18 +382,18 @@ var DATA = {
       },
       "11:30-12:00": {
         "aditya": {
-          "subject": "સંસ્કૃત",
-          "teacher": "ચંદ્રહાસ ગુરુજી",
+          "subject": "રામાયણ",
+          "teacher": "સપનાબેન",
           "location": ""
         },
         "ravi": {
-          "subject": "સંસ્કૃત",
-          "teacher": "ચંદ્રહાસ ગુરુજી",
+          "subject": "રામાયણ",
+          "teacher": "સપનાબેન",
           "location": ""
         },
         "bhaskar": {
-          "subject": "સંસ્કૃત",
-          "teacher": "ચંદ્રહાસ ગુરુજી",
+          "subject": "રામાયણ",
+          "teacher": "સપનાબેન",
           "location": ""
         }
       },
@@ -418,188 +418,188 @@ var DATA = {
     "બુધવાર": {
       "8:00-8:30": {
         "aditya": {
-          "subject": "ઉત્સવ",
-          "teacher": "ઉત્સવ",
-          "location": "વાકળ સેવા કેન્દ્ર"
+          "subject": "વાંચન -લેખન - ગણિત",
+          "teacher": "સંજયભાઈ",
+          "location": ""
         },
         "ravi": {
-          "subject": "ઉત્સવ",
-          "teacher": "ઉત્સવ",
-          "location": "વાકળ સેવા કેન્દ્ર"
+          "subject": "અંગ્રેજી",
+          "teacher": "હિતેશભાઈ પોપલીયા",
+          "location": ""
         },
         "bhaskar": {
-          "subject": "ઉત્સવ",
-          "teacher": "ઉત્સવ",
-          "location": "વાકળ સેવા કેન્દ્ર"
+          "subject": "અંગ્રેજી",
+          "teacher": "હિતેશભાઈ પોપલીયા",
+          "location": ""
         }
       },
       "8:30-9:00": {
         "aditya": {
-          "subject": "ઉત્સવ",
-          "teacher": "ઉત્સવ",
+          "subject": "અલ્પાહાર",
+          "teacher": "અન્નપૂર્ણાદેવી",
           "location": "વાકળ સેવા કેન્દ્ર"
         },
         "ravi": {
-          "subject": "ઉત્સવ",
-          "teacher": "ઉત્સવ",
+          "subject": "અલ્પાહાર",
+          "teacher": "અન્નપૂર્ણાદેવી",
           "location": "વાકળ સેવા કેન્દ્ર"
         },
         "bhaskar": {
-          "subject": "ઉત્સવ",
-          "teacher": "ઉત્સવ",
+          "subject": "અલ્પાહાર",
+          "teacher": "અન્નપૂર્ણાદેવી",
           "location": "વાકળ સેવા કેન્દ્ર"
         }
       },
       "9:00-9:30": {
         "aditya": {
-          "subject": "ઉત્સવ",
-          "teacher": "ઉત્સવ",
-          "location": "વાકળ સેવા કેન્દ્ર"
+          "subject": "સંસ્કૃત",
+          "teacher": "ચંદ્રહાસ ગુરુજી",
+          "location": "અભ્યાસ ગૃહ"
         },
         "ravi": {
-          "subject": "ઉત્સવ",
-          "teacher": "ઉત્સવ",
-          "location": "વાકળ સેવા કેન્દ્ર"
+          "subject": "સંસ્કૃત",
+          "teacher": "ચંદ્રહાસ ગુરુજી",
+          "location": "અભ્યાસ ગૃહ"
         },
         "bhaskar": {
-          "subject": "ઉત્સવ",
-          "teacher": "ઉત્સવ",
-          "location": "વાકળ સેવા કેન્દ્ર"
+          "subject": "સંસ્કૃત",
+          "teacher": "ચંદ્રહાસ ગુરુજી",
+          "location": "અભ્યાસ ગૃહ"
         }
       },
       "9:30-10:00": {
         "aditya": {
-          "subject": "ઉત્સવ",
-          "teacher": "ઉત્સવ",
+          "subject": "સંસ્કૃત",
+          "teacher": "ચંદ્રહાસ ગુરુજી",
           "location": "અભ્યાસ ગૃહ"
         },
         "ravi": {
-          "subject": "ઉત્સવ",
-          "teacher": "ઉત્સવ",
+          "subject": "સંસ્કૃત",
+          "teacher": "ચંદ્રહાસ ગુરુજી",
           "location": "અભ્યાસ ગૃહ"
         },
         "bhaskar": {
-          "subject": "ઉત્સવ",
-          "teacher": "ઉત્સવ",
+          "subject": "સંસ્કૃત",
+          "teacher": "ચંદ્રહાસ ગુરુજી",
           "location": "અભ્યાસ ગૃહ"
         }
       },
       "7:30-8:00": {
         "aditya": {
-          "subject": "",
-          "teacher": "",
+          "subject": "વાંચન -લેખન - ગણિત",
+          "teacher": "સંજયભાઈ",
           "location": ""
         },
         "ravi": {
-          "subject": "",
-          "teacher": "",
+          "subject": "અંગ્રેજી",
+          "teacher": "હિતેશભાઈ પોપલીયા",
           "location": ""
         },
         "bhaskar": {
-          "subject": "",
-          "teacher": "",
+          "subject": "અંગ્રેજી",
+          "teacher": "હિતેશભાઈ પોપલીયા",
           "location": ""
         }
       },
       "7:00-7:30": {
         "aditya": {
-          "subject": "",
-          "teacher": "",
+          "subject": "ક્રીડા",
+          "teacher": "સંજયભાઈ",
           "location": ""
         },
         "ravi": {
-          "subject": "",
-          "teacher": "",
+          "subject": "ક્રીડા",
+          "teacher": "સંજયભાઈ",
           "location": ""
         },
         "bhaskar": {
-          "subject": "",
-          "teacher": "",
+          "subject": "ક્રીડા",
+          "teacher": "સંજયભાઈ",
           "location": ""
         }
       },
       "10:00-10:30": {
         "aditya": {
-          "subject": "",
-          "teacher": "",
-          "location": ""
+          "subject": "ચિત્ર",
+          "teacher": "દિશાબેન",
+          "location": "અભ્યાસ ગૃહ"
         },
         "ravi": {
-          "subject": "",
-          "teacher": "",
-          "location": ""
+          "subject": "ચિત્ર",
+          "teacher": "દિશાબેન",
+          "location": "અભ્યાસ ગૃહ"
         },
         "bhaskar": {
-          "subject": "",
-          "teacher": "",
-          "location": ""
+          "subject": "સંસ્કૃત",
+          "teacher": "ચંદ્રહાસ ગુરુજી",
+          "location": "અભ્યાસ ગૃહ"
         }
       },
       "10:30-11:00": {
         "aditya": {
-          "subject": "",
-          "teacher": "",
-          "location": ""
+          "subject": "ચિત્ર",
+          "teacher": "દિશાબેન",
+          "location": "અભ્યાસ ગૃહ"
         },
         "ravi": {
-          "subject": "",
-          "teacher": "",
-          "location": ""
+          "subject": "ચિત્ર",
+          "teacher": "દિશાબેન",
+          "location": "અભ્યાસ ગૃહ"
         },
         "bhaskar": {
-          "subject": "",
-          "teacher": "",
-          "location": ""
+          "subject": "સંસ્કૃત",
+          "teacher": "ચંદ્રહાસ ગુરુજી",
+          "location": "અભ્યાસ ગૃહ"
         }
       },
       "11:00-11:30": {
         "aditya": {
-          "subject": "",
-          "teacher": "",
-          "location": ""
+          "subject": "ચિત્ર",
+          "teacher": "દિશાબેન",
+          "location": "અભ્યાસ ગૃહ"
         },
         "ravi": {
-          "subject": "",
-          "teacher": "",
-          "location": ""
+          "subject": "ચિત્ર",
+          "teacher": "દિશાબેન",
+          "location": "અભ્યાસ ગૃહ"
         },
         "bhaskar": {
-          "subject": "",
-          "teacher": "",
-          "location": ""
+          "subject": "સંસ્કૃત",
+          "teacher": "ચંદ્રહાસ ગુરુજી",
+          "location": "અભ્યાસ ગૃહ"
         }
       },
       "11:30-12:00": {
         "aditya": {
-          "subject": "",
-          "teacher": "",
-          "location": ""
+          "subject": "રામાયણ",
+          "teacher": "સપનાબેન",
+          "location": "અભ્યાસ ગૃહ"
         },
         "ravi": {
-          "subject": "",
-          "teacher": "",
-          "location": ""
+          "subject": "રામાયણ",
+          "teacher": "સપનાબેન",
+          "location": "અભ્યાસ ગૃહ"
         },
         "bhaskar": {
-          "subject": "",
-          "teacher": "",
-          "location": ""
+          "subject": "રામાયણ",
+          "teacher": "સપનાબેન",
+          "location": "અભ્યાસ ગૃહ"
         }
       },
       "12:00-12:30": {
         "aditya": {
-          "subject": "",
-          "teacher": "",
+          "subject": "ક્રીડા",
+          "teacher": "સપનાબેન",
           "location": ""
         },
         "ravi": {
-          "subject": "",
-          "teacher": "",
+          "subject": "ક્રીડા",
+          "teacher": "સપનાબેન",
           "location": ""
         },
         "bhaskar": {
-          "subject": "",
-          "teacher": "",
+          "subject": "ક્રીડા",
+          "teacher": "સપનાબેન",
           "location": ""
         }
       }
@@ -617,8 +617,8 @@ var DATA = {
           "location": "અભ્યાસ ગૃહ"
         },
         "bhaskar": {
-          "subject": "ક્રિયાકલાપ",
-          "teacher": "જિગીષાબેન",
+          "subject": "આયુર્વેદ",
+          "teacher": "હિતેશભાઈ",
           "location": "અભ્યાસ ગૃહ"
         }
       },
@@ -634,8 +634,8 @@ var DATA = {
           "location": "અભ્યાસ ગૃહ"
         },
         "bhaskar": {
-          "subject": "ક્રિયાકલાપ",
-          "teacher": "જિગીષાબેન",
+          "subject": "આયુર્વેદ",
+          "teacher": "હિતેશભાઈ",
           "location": "અભ્યાસ ગૃહ"
         }
       },
@@ -685,9 +685,9 @@ var DATA = {
           "location": "અભ્યાસ ગૃહ"
         },
         "bhaskar": {
-          "subject": "ક્રિયાકલાપ",
-          "teacher": "જિગીષાબેન",
-          "location": "અભ્યાસ ગૃહ"
+          "subject": "યોગ - જીવન વિજ્ઞાન",
+          "teacher": "નિસર્ગભાઈ",
+          "location": ""
         }
       },
       "7:00-7:30": {
@@ -736,8 +736,8 @@ var DATA = {
           "location": ""
         },
         "bhaskar": {
-          "subject": "સ્વાધ્યાય",
-          "teacher": "સ્વાધ્યાય",
+          "subject": "ગણિત",
+          "teacher": "મનીષભાઈ",
           "location": ""
         }
       },
@@ -770,8 +770,8 @@ var DATA = {
           "location": ""
         },
         "bhaskar": {
-          "subject": "ગણિત",
-          "teacher": "મનીષભાઈ",
+          "subject": "અભિવ્યક્તિ",
+          "teacher": "ચિન્મયભાઈ",
           "location": ""
         }
       },
@@ -1036,10 +1036,10 @@ var DATA = {
   ],
   "weekHistory": [
     {
-      "id": "w_ms4x1bo2",
-      "label": "આપમેળે સાચવેલું — 28/07/2026, 10:44 pm",
+      "id": "w_ms9y4ifs",
+      "label": "આપમેળે સાચવેલું — 01/08/2026, 11:13 am",
       "weekStart": "",
-      "savedAt": "2026-07-28T17:14:29.330Z",
+      "savedAt": "2026-08-01T05:43:48.568Z",
       "slots": [
         "7:00-7:30",
         "7:30-8:00",
@@ -1109,7 +1109,7 @@ var DATA = {
           "9:00-9:30": {
             "aditya": {
               "subject": "સંગીત",
-              "teacher": "કીર્તનભાઈ",
+              "teacher": "દિપક ગુરુજી",
               "location": "અભ્યાસ ગૃહ"
             },
             "ravi": {
@@ -1719,9 +1719,9 @@ var DATA = {
               "location": "અભ્યાસ ગૃહ"
             },
             "bhaskar": {
-              "subject": "ક્રિયાકલાપ",
-              "teacher": "જિગીષાબેન",
-              "location": "અભ્યાસ ગૃહ"
+              "subject": "યોગ - જીવન વિજ્ઞાન",
+              "teacher": "નિસર્ગભાઈ",
+              "location": ""
             }
           },
           "7:00-7:30": {
