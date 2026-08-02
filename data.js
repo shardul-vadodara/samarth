@@ -778,17 +778,17 @@ var DATA = {
       "12:00-12:30": {
         "aditya": {
           "subject": "ક્રીડા",
-          "teacher": "ચિન્મયભાઈ",
+          "teacher": "સપનાબેન",
           "location": ""
         },
         "ravi": {
           "subject": "ક્રીડા",
-          "teacher": "ચિન્મયભાઈ",
+          "teacher": "સપનાબેન",
           "location": ""
         },
         "bhaskar": {
           "subject": "ક્રીડા",
-          "teacher": "ચિન્મયભાઈ",
+          "teacher": "સપનાબેન",
           "location": ""
         }
       }
