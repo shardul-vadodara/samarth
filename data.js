@@ -263,35 +263,35 @@ var DATA = {
       },
       "9:00-9:30": {
         "aditya": {
-          "subject": "સંગીત",
-          "teacher": "દિપક ગુરુજી",
+          "subject": "સંસ્કૃત",
+          "teacher": "ચંદ્રહાસ ગુરુજી",
           "location": "અભ્યાસ ગૃહ"
         },
         "ravi": {
-          "subject": "સંગીત",
-          "teacher": "દિપક ગુરુજી",
+          "subject": "સંસ્કૃત",
+          "teacher": "ચંદ્રહાસ ગુરુજી",
           "location": "અભ્યાસ ગૃહ"
         },
         "bhaskar": {
-          "subject": "સંગીત",
-          "teacher": "દિપક ગુરુજી",
+          "subject": "સંસ્કૃત",
+          "teacher": "ચંદ્રહાસ ગુરુજી",
           "location": "અભ્યાસ ગૃહ"
         }
       },
       "9:30-10:00": {
         "aditya": {
-          "subject": "સંગીત",
-          "teacher": "દિપક ગુરુજી",
+          "subject": "સંસ્કૃત",
+          "teacher": "ચંદ્રહાસ ગુરુજી",
           "location": "અભ્યાસ ગૃહ"
         },
         "ravi": {
-          "subject": "સંગીત",
-          "teacher": "દિપક ગુરુજી",
+          "subject": "સંસ્કૃત",
+          "teacher": "ચંદ્રહાસ ગુરુજી",
           "location": "અભ્યાસ ગૃહ"
         },
         "bhaskar": {
-          "subject": "સંગીત",
-          "teacher": "દિપક ગુરુજી",
+          "subject": "સંસ્કૃત",
+          "teacher": "ચંદ્રહાસ ગુરુજી",
           "location": "અભ્યાસ ગૃહ"
         }
       },
@@ -399,18 +399,18 @@ var DATA = {
       },
       "12:00-12:30": {
         "aditya": {
-          "subject": "ક્રીડા",
-          "teacher": "સપનાબેન",
+          "subject": "સ્વાધ્યાય",
+          "teacher": "સ્વાધ્યાય",
           "location": "અભ્યાસ ગૃહ"
         },
         "ravi": {
-          "subject": "ક્રીડા",
-          "teacher": "સપનાબેન",
+          "subject": "સ્વાધ્યાય",
+          "teacher": "સ્વાધ્યાય",
           "location": "અભ્યાસ ગૃહ"
         },
         "bhaskar": {
-          "subject": "ક્રીડા",
-          "teacher": "સપનાબેન",
+          "subject": "સ્વાધ્યાય",
+          "teacher": "સ્વાધ્યાય",
           "location": "અભ્યાસ ગૃહ"
         }
       }
@@ -452,35 +452,35 @@ var DATA = {
       },
       "9:00-9:30": {
         "aditya": {
-          "subject": "સંગીત",
-          "teacher": "દિપક ગુરુજી",
+          "subject": "સંસ્કૃત",
+          "teacher": "ચંદ્રહાસ ગુરુજી",
           "location": "અભ્યાસ ગૃહ"
         },
         "ravi": {
-          "subject": "સંગીત",
-          "teacher": "દિપક ગુરુજી",
+          "subject": "સંસ્કૃત",
+          "teacher": "ચંદ્રહાસ ગુરુજી",
           "location": "અભ્યાસ ગૃહ"
         },
         "bhaskar": {
-          "subject": "સંગીત",
-          "teacher": "દિપક ગુરુજી",
+          "subject": "સંસ્કૃત",
+          "teacher": "ચંદ્રહાસ ગુરુજી",
           "location": "અભ્યાસ ગૃહ"
         }
       },
       "9:30-10:00": {
         "aditya": {
-          "subject": "સંગીત",
-          "teacher": "દિપક ગુરુજી",
+          "subject": "સંસ્કૃત",
+          "teacher": "ચંદ્રહાસ ગુરુજી",
           "location": "અભ્યાસ ગૃહ"
         },
         "ravi": {
-          "subject": "સંગીત",
-          "teacher": "દિપક ગુરુજી",
+          "subject": "સંસ્કૃત",
+          "teacher": "ચંદ્રહાસ ગુરુજી",
           "location": "અભ્યાસ ગૃહ"
         },
         "bhaskar": {
-          "subject": "સંગીત",
-          "teacher": "દિપક ગુરુજી",
+          "subject": "સંસ્કૃત",
+          "teacher": "ચંદ્રહાસ ગુરુજી",
           "location": "અભ્યાસ ગૃહ"
         }
       },
@@ -588,18 +588,18 @@ var DATA = {
       },
       "12:00-12:30": {
         "aditya": {
-          "subject": "ક્રીડા",
-          "teacher": "સપનાબેન",
+          "subject": "સ્વાધ્યાય",
+          "teacher": "સ્વાધ્યાય",
           "location": "અભ્યાસ ગૃહ"
         },
         "ravi": {
-          "subject": "ક્રીડા",
-          "teacher": "સપનાબેન",
+          "subject": "સ્વાધ્યાય",
+          "teacher": "સ્વાધ્યાય",
           "location": "અભ્યાસ ગૃહ"
         },
         "bhaskar": {
-          "subject": "ક્રીડા",
-          "teacher": "સપનાબેન",
+          "subject": "સ્વાધ્યાય",
+          "teacher": "સ્વાધ્યાય",
           "location": "અભ્યાસ ગૃહ"
         }
       }
@@ -9586,7 +9586,7 @@ var DATA = {
     },
     "શુક્રવાર": {
       "type": "holiday",
-      "label": "રક્ષાબંધન ઉત્સવ અવકાશ"
+      "label": "જન્માષ્ટમી ઉત્સવ અવકાશ "
     }
   }
 };
