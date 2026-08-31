@@ -41,12 +41,12 @@ var DATA = {
       "8:00-8:30": {
         "aditya": {
           "subject": "વાંચન -લેખન - ગણિત",
-          "teacher": "સંજયભાઈ",
+          "teacher": "હિતેશભાઈ પોપલીયા",
           "location": "અભ્યાસ ગૃહ"
         },
         "ravi": {
           "subject": "વાંચન -લેખન - ગણિત",
-          "teacher": "સંજયભાઈ",
+          "teacher": "હિતેશભાઈ પોપલીયા",
           "location": "અભ્યાસ ગૃહ"
         },
         "bhaskar": {
@@ -109,12 +109,12 @@ var DATA = {
       "7:30-8:00": {
         "aditya": {
           "subject": "વાંચન -લેખન - ગણિત",
-          "teacher": "સંજયભાઈ",
+          "teacher": "હિતેશભાઈ પોપલીયા",
           "location": "અભ્યાસ ગૃહ"
         },
         "ravi": {
           "subject": "વાંચન -લેખન - ગણિત",
-          "teacher": "સંજયભાઈ",
+          "teacher": "હિતેશભાઈ પોપલીયા",
           "location": "અભ્યાસ ગૃહ"
         },
         "bhaskar": {
