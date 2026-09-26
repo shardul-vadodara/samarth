@@ -942,8 +942,8 @@ var DATA = {
           "location": "ખેતર"
         },
         "bhaskar": {
-          "subject": "ગણિત",
-          "teacher": "મનીષભાઈ",
+          "subject": "વિજ્ઞાન",
+          "teacher": "પ્રતિકભાઈ",
           "location": "ખેતર"
         }
       },
@@ -959,8 +959,8 @@ var DATA = {
           "location": "ખેતર"
         },
         "bhaskar": {
-          "subject": "ગણિત",
-          "teacher": "મનીષભાઈ",
+          "subject": "વિજ્ઞાન",
+          "teacher": "પ્રતિકભાઈ",
           "location": "ખેતર"
         }
       },
