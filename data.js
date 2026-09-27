@@ -23663,7 +23663,7 @@ var DATA = {
   "parentSessions": [
     {
       "id": "ps_muhy0d6700j",
-      "date": "2026-09-30",
+      "date": "2026-09-28",
       "start": "07:00",
       "duration": 30,
       "groups": [
@@ -23671,7 +23671,7 @@ var DATA = {
         "ravi",
         "bhaskar"
       ],
-      "parent": "પ્રતીક ગોધાણી ",
+      "parent": "પ્રતીક ગોધાણી",
       "topic": "રમત",
       "location": ""
     },
@@ -23702,6 +23702,45 @@ var DATA = {
       "parent": "Sweeti Manish Kumar jain",
       "topic": "ભાષા",
       "location": "અભ્યાસ ગૃહ"
+    },
+    {
+      "id": "ps_mujl87n4m1q",
+      "date": "2026-09-21",
+      "start": "07:00",
+      "duration": 30,
+      "groups": [
+        "aditya",
+        "ravi",
+        "bhaskar"
+      ],
+      "parent": "પ્રતીક ગોધાણી",
+      "topic": "રમત",
+      "location": "",
+      "proposal": "442a8debea3eb335799460445f230d27"
+    },
+    {
+      "id": "ps_mujl8qlmiy0",
+      "date": "2026-09-21",
+      "start": "07:30",
+      "duration": 30,
+      "groups": [
+        "bhaskar"
+      ],
+      "parent": "પ્રતિક ગોધાણી",
+      "topic": "ક્રીડા",
+      "location": ""
+    },
+    {
+      "id": "ps_mujld5r8c4o",
+      "date": "2026-09-28",
+      "start": "07:30",
+      "duration": 30,
+      "groups": [
+        "bhaskar"
+      ],
+      "parent": "પ્રતિકભાઈ ગોધાણી",
+      "topic": "રમત",
+      "location": ""
     }
   ]
 };
